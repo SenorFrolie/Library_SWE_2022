@@ -21,7 +21,8 @@ public class TheSystem {
             System.out.println("1. Browse ");
             System.out.println("2. Checkout ");
             System.out.println("3. Return ");
-            System.out.println("4. Exit. ");
+            System.out.println("4. Ledger ");
+            System.out.println("5. Exit. ");
             System.out.println("-----------------");
 
             user_input = sc.nextInt();
@@ -34,6 +35,8 @@ public class TheSystem {
             } else if (user_input == 3) {
 
             } else if (user_input == 4) {
+
+            } else if (user_input == 5) {
 
             }
 
