@@ -1,4 +1,5 @@
-﻿Title,Author ,Id
-Harry potter,J k Rowling,1
-GOT,G R R Martin,2
-LoTR,J R R Tolkien,3
+﻿Title,Author ,Id,Best seller
+Harry potter,J k Rowling,1,Yes
+GOT,G R R Martin,2,No 
+LoTR,J R R Tolkien,3,No 
+Lookinng for Alaska ,Hank Green ,4,Yes
