@@ -10,6 +10,8 @@ public class TheSystem {
         System.out.println("Where would you like to go? ");
         int user_input;
 
+        Ledger ledger = new Ledger();
+
         System.out.println("-------------------------------------------------");
         System.out.println("|            Welcome to our Library              |");
         System.out.println("|               Menu Application                 |");
@@ -21,7 +23,7 @@ public class TheSystem {
             System.out.println("1. Browse ");
             System.out.println("2. Checkout ");
             System.out.println("3. Return ");
-            System.out.println("4. Ledger ");
+            System.out.println("4. Checkout History ");
             System.out.println("5. Exit. ");
             System.out.println("-----------------");
 
@@ -35,6 +37,10 @@ public class TheSystem {
             } else if (user_input == 3) {
 
             } else if (user_input == 4) {
+
+                System.out.println("What is your library ID? ");
+                Integer libID = sc.nextInt();
+                Ledger.getLedger(libID);
 
             } else if (user_input == 5) {
 
