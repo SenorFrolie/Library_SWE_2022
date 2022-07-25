@@ -20,7 +20,6 @@ public class MemberPages {
         System.out.println(currentMember.getName());
         System.out.println(currentMember.getId());
         System.out.println(currentMember.getPhoneNum());
-        System.out.println(currentMember.getTickets());
         System.out.println(currentMember.getOverdue());
         System.out.println(currentMember.getFineTotal());
 
@@ -40,7 +39,9 @@ public class MemberPages {
         Member foundMember = new Member();
         for (Member member : memeberList) {
             if (member.getId().equals(ID)) {
+
                 return member;
+
             }
 
         }
@@ -48,28 +49,38 @@ public class MemberPages {
         return foundMember;
     }
 
-   
+   public void readMemberList(){
+    BufferedReader reader = null;
+    try {
+        FileReader file = new FileReader("MemberList.csv");
+        String info = reader.readLine();
+        while (info != null ){
+            String[] elements= info.split(",");
+            if (elements.length  < 5){
+                throw new RuntimeException ("Line too short");//handle missing entrys 
+            }
+            String Name = elements[0];
+            String ID = elements[1];
+            String phoneNum = elements[2];
+            String overdue= elements[3];
+            String fineTot= elements [4];
+            Member temp = new Member( Name , ID , phoneNum, overdue,fineTot);
+            memeberBook.add((Member)temp);
+            info= reader.readLine(); 
+        }
+    } catch (Exception e) {
+    
+        //TODO: handle exception
+    }
+
+   }
     public static void main(String[] args) {
 
         MemberPages yellow = new MemberPages();
-        Member newMember = new Member();
-        Member newMember1 = new Member();
-        Member newMember2 = new Member();
-        yellow.addMemeber(newMember, "Kelly Marx", "513SD227", "512-999-9999");
-        yellow.addMemeber(newMember1, "Marry Marx", "677SD226", "512-888-8888");
-        yellow.addMemeber(newMember2, "Sally Davis", "222CD656", "819-667-6666");
-    
-        yellow.memeberBook.add(newMember);
-        yellow.memeberBook.add(newMember1);
-        yellow.memeberBook.add(newMember2);
-
-     
-        yellow.dumpMember(yellow.memeberBook.get(0));
-        
-        yellow.dumpMember(yellow.findMember(yellow.memeberBook, "222CD656"));
-
-        yellow.editMemeber("Kevin Marx", "513SD227");
-        yellow.dumpMember(yellow.findMember(yellow.memeberBook,"513SD227" ));
+        yellow.readMemberList();
+        Member test = new Member ( "jhon doe", "000", "0","0","0");
+        yellow.memeberBook.add(test);
+        yellow.dumpMember(yellow.findMember(yellow.memeberBook,"978DF12"));
 
     }
 }

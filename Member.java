@@ -1,11 +1,26 @@
-class Member {
+public class Member {
 
-    private String id;
     private String name;
     private String phoneNum;
-    private String[] tickets;
-    private int overdue;
-    private int finetotal;
+    private String id;
+    private String overdue;
+    private String finetotal;
+
+    public Member(String name , String phoneNum, String id, String overdue, String finetotal) {
+        this.name = name;
+        this.id = id;
+        this.phoneNum = phoneNum;
+        this.overdue = overdue;
+        this.finetotal = finetotal;
+    }
+
+    public Member (){
+        name ="null";
+        id="null";
+        phoneNum="null";
+        overdue="null";
+        finetotal="null";
+    }
 
     public void setID(String id) {
         this.id = id;
@@ -19,15 +34,11 @@ class Member {
         this.phoneNum = phoneNum;
     }
 
-    public void setTickets(String[] tickets) {
-        this.tickets = tickets;
-    }
-
-    public void setOverdue(int overdue) {
+    public void setOverdue(String overdue) {
         this.overdue = overdue;
     }
 
-    public void setFineTotal(int finetotal) {
+    public void setFineTotal(String finetotal) {
         this.finetotal = finetotal;
     }
 
@@ -43,15 +54,11 @@ class Member {
         return phoneNum;
     }
 
-    public String[] getTickets() {
-        return tickets;
-    }
-
-    public int getOverdue() {
+    public String getOverdue() {
         return overdue;
     }
 
-    public int getFineTotal() {
+    public String getFineTotal() {
         return finetotal;
     }
 
