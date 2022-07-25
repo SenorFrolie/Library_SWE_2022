@@ -25,46 +25,14 @@ public class MemberPages {
 
     }
 
-    /*
-     * public void readMembers (){
-     * 
-     * 
-     * FileReader file = new FileReader("MemberList.csv");
-     * BufferedReader reader = null;
-     * String line ="";
-     * try {
-     * 
-     * reader = new BufferedReader(file);
-     * while ((line = reader.readLine()) !=null){
-     * 
-     * String [] row= line.split(",");
-     * for(String index : row){
-     * System.out.printf("%-10s", index);
-     * }
-     * }
-     * System.out.println();
-     * 
-     * }
-     * catch(Exception e){
-     * e.printStackTrace();
-     * 
-     * }
-     * finally{
-     * try{
-     * reader.close();
-     * 
-     * } catch(IOException e){
-     * //TODO Auto - gen catch block
-     * e.printStackTrace();
-     * }
-     * 
-     * }
-     * 
-     * }
-     * public void findMember(){
-     * 
-     * }
-     */
+    public void editMemeber (String property, String ID){
+        Member current =findMember(memeberBook, ID);
+
+        current.setName(property);
+        System.out.println(current.getName()+" Has been sucsessfully edited");
+
+    }
+   
     public Member findMember(ArrayList<Member> memeberList, String ID) {
 
         Member foundMember = new Member();
@@ -87,7 +55,7 @@ public class MemberPages {
         yellow.addMemeber(newMember, "Kelly Marx", "513SD227", "512-999-9999");
         yellow.addMemeber(newMember1, "Marry Marx", "677SD226", "512-888-8888");
         yellow.addMemeber(newMember2, "Sally Davis", "222CD656", "819-667-6666");
-        
+    
         yellow.memeberBook.add(newMember);
         yellow.memeberBook.add(newMember1);
         yellow.memeberBook.add(newMember2);
@@ -96,6 +64,9 @@ public class MemberPages {
         yellow.dumpMember(yellow.memeberBook.get(0));
         
         yellow.dumpMember(yellow.findMember(yellow.memeberBook, "222CD656"));
+
+        yellow.editMemeber("Kevin Marx", "513SD227");
+        yellow.dumpMember(yellow.findMember(yellow.memeberBook,"513SD227" ));
 
     }
 }
