@@ -4,18 +4,19 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class MemberPages {
-
+// Bellow is the memberBook which stores each memeber Object that is bieng worked on or edited in the system. 
     ArrayList<Member> memeberBook = new ArrayList<Member>();
 
     public void addMemeber(Member newMember, String name, String id, String phoneNum) {
 
+        // used to set the Basic Member propertys when creating a new member
         newMember.setID(id);
         newMember.setName(name);
         newMember.setphoneNum(phoneNum);
     }
 
     public void dumpMember(Member currentMember) {
-
+// Dumps a Member object information to terminal 
         System.out.println(currentMember.getName());
         System.out.println(currentMember.getId());
         System.out.println(currentMember.getPhoneNum());
@@ -26,6 +27,7 @@ public class MemberPages {
     }
 
     public void editMemeber (String property, String ID){
+        // Used to edit a member property via findMember method and ID
         Member current =findMember(memeberBook, ID);
 
         current.setName(property);
@@ -34,7 +36,7 @@ public class MemberPages {
     }
    
     public Member findMember(ArrayList<Member> memeberList, String ID) {
-
+// Used to locate a Member object via ID parameter 
         Member foundMember = new Member();
         for (Member member : memeberList) {
             if (member.getId().equals(ID)) {
@@ -46,6 +48,7 @@ public class MemberPages {
         return foundMember;
     }
 
+   
     public static void main(String[] args) {
 
         MemberPages yellow = new MemberPages();
