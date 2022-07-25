@@ -37,22 +37,24 @@ public class MemberPages {
     public Member findMember(ArrayList<Member> memeberList, String ID) {
 // Used to locate a Member object via ID parameter 
         Member foundMember = new Member();
+        
         for (Member member : memeberList) {
             if (member.getId().equals(ID)) {
+                System.out.println("member: "+member);
 
-                return member;
+                return foundMember;
 
             }
 
         }
 
-        return foundMember;
+        //return foundMember;
     }
 
    public void readMemberList(){
-    BufferedReader reader = null;
     try {
         FileReader file = new FileReader("MemberList.csv");
+        BufferedReader reader = new BufferedReader(file);
         String info = reader.readLine();
         while (info != null ){
             String[] elements= info.split(",");
@@ -66,10 +68,12 @@ public class MemberPages {
             String fineTot= elements [4];
             Member temp = new Member( Name , ID , phoneNum, overdue,fineTot);
             memeberBook.add((Member)temp);
-            info= reader.readLine(); 
+
+            info = reader.readLine(); 
         }
+        file.close();
     } catch (Exception e) {
-    
+        System.out.println("FILE ERROR: "+e);
         //TODO: handle exception
     }
 
@@ -78,8 +82,7 @@ public class MemberPages {
 
         MemberPages yellow = new MemberPages();
         yellow.readMemberList();
-        Member test = new Member ( "jhon doe", "000", "0","0","0");
-        yellow.memeberBook.add(test);
+        System.out.println(yellow.memeberBook);
         yellow.dumpMember(yellow.findMember(yellow.memeberBook,"978DF12"));
 
     }
