@@ -1,5 +1,5 @@
-public class Member {
-    
+class Member {
+
     private String id;
     private String name;
     private String phoneNum;
@@ -7,36 +7,52 @@ public class Member {
     private int overdue;
     private int finetotal;
 
-    public Member (String id , String name, String phoneNum, String[] tickets , int overdue, int finetotal)
-    {
-        this.id=id;
-        this.name=name;
-        this.phoneNum=phoneNum;
-        this.tickets=tickets;
-        this.overdue=overdue;
-        this.finetotal=finetotal;
-
+    public void setID(String id) {
+        this.id = id;
     }
 
-    public String getId (){
-        return id ;
+    public void setName(String name) {
+        this.name = name;
     }
-    public String getName (){
-        return name ;
+
+    public void setphoneNum(String phoneNum) {
+        this.phoneNum = phoneNum;
     }
-    public String getPhoneNum (){
-        return phoneNum ;
+
+    public void setTickets(String[] tickets) {
+        this.tickets = tickets;
     }
-    public String[] getTickets (){
-        return tickets ;
+
+    public void setOverdue(int overdue) {
+        this.overdue = overdue;
     }
-    public int getOverdue (){
-        return overdue ;
+
+    public void setFineTotal(int finetotal) {
+        this.finetotal = finetotal;
     }
-    public int getFineTotal(){
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPhoneNum() {
+        return phoneNum;
+    }
+
+    public String[] getTickets() {
+        return tickets;
+    }
+
+    public int getOverdue() {
+        return overdue;
+    }
+
+    public int getFineTotal() {
         return finetotal;
     }
 
-   
 }
-
