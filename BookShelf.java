@@ -1,10 +1,11 @@
 import java.io.*;
-import java.lang.reflect.Method;
+//import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
-import java.util.StringTokenizer;
+//import java.util.StringTokenizer;
+
 
 public class BookShelf {
 
@@ -27,7 +28,8 @@ public class BookShelf {
             System.out.println("\r\n");
             System.out.println("1. Books ");
             System.out.println("2. Visual ");
-            System.out.println("0. Exit ");
+            System.out.println("3. Return to Main Menu ");
+            System.out.println("0. Kill Program ");
 
             user_input = sc.nextInt();
 
@@ -49,7 +51,7 @@ public class BookShelf {
                         if (elements.length < 4) {
                             throw new RuntimeException("line too short"); // handle missing entries
                         }
-
+                        
                         String Title = elements[0];
                         String Author = elements[1];
                         String Id = elements[2];
@@ -64,34 +66,50 @@ public class BookShelf {
 
                     }
                 } catch (Exception e) {
-                    // TODO: handle exception
+
                 }
 
+               /* for (Books items : dataList) {
+                    System.out.println(items.getAuthor());
+               }
+                */
+               System.out.println("How would you like it shown to you? ");
+               System.out.println("1: By Title");
+               System.out.println("2: Author");
+               System.out.println("3: Book of the Year");
+
+               user_input = sc.nextInt();
+               if(user_input == 1){
+            System.out.println("---------------------------");
+                for (Books items : dataList) {
+                    System.out.println(items.getTitle());
+                    
+               }
+            System.out.println("---------------------------");
+
+
+
+             }else if(user_input == 2){
+            System.out.println("---------------------------");
                 for (Books items : dataList) {
                     System.out.println(items.getAuthor());
-                }
+               }
+            System.out.println("---------------------------");
+             }
+             else if(user_input == 3){
+            System.out.println("---------------------------");
+                for (Books items : dataList) {
+                    if(items.getBOTY().equals("Y")){
+                        System.out.println(items.getTitle() + " by "+ items.getAuthor());
 
-                /*
-                 * try {
-                 * reader = new BufferedReader(new FileReader(book_path));
-                 * while ((line = reader.readLine()) != null) {
-                 * 
-                 * String[] csvList = line.split(",");
-                 * 
-                 * for (String index : csvList) {
-                 * BookShelf books = new BookShelf();
-                 * 
-                 * 
-                 * System.out.printf("%-20s", index);
-                 * }
-                 * System.out.println();
-                 * }
-                 * } catch (Exception e) {
-                 * e.printStackTrace();
-                 * } finally {
-                 * reader.close();
-                 * }
-                 */
+                    }
+                }
+            System.out.println("---------------------------");
+
+
+             }
+
+               
             } else if (user_input == 2) {
                 System.out.println("--------------------------------------");
                 System.out.println("|    You're in Visual Audio section    | ");
@@ -127,10 +145,14 @@ public class BookShelf {
                     // TODO: handle exception
                 }
 
+
+
                 for (VisualMat items : dataList_VS) {
                     System.out.println(items.getDirector());
                 }
 
+            }else if(user_input == 3){
+                return;
             }
 
         } while (user_input != 0);

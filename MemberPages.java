@@ -40,13 +40,14 @@ public class MemberPages {
         
         for (Member member : memeberList) {
             if (member.getId().equals(ID)) {
-                System.out.println("member: "+member);
+                System.out.println("member: "+ member);
 
                 return foundMember;
 
             }
 
         }
+        return foundMember;
 
         //return foundMember;
     }

@@ -14,6 +14,7 @@ public class Member {
         this.finetotal = finetotal;
     }
 
+    // Default Constructor 
     public Member (){
         name ="null";
         id="null";
