@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 public class MemberPages {
 // Bellow is the memberBook which stores each memeber Object that is bieng worked on or edited in the system. 
-    ArrayList<Member> memeberBook = new ArrayList<Member>();
+    ArrayList<Member> memberBook = new ArrayList<Member>();
 
     public void addMemeber(Member newMember, String name, String id, String phoneNum) {
 
@@ -27,63 +27,80 @@ public class MemberPages {
 
     public void editMemeber (String property, String ID){
         // Used to edit a member property via findMember method and ID
-        Member current =findMember(memeberBook, ID);
+        Member current =findMember(memberBook, ID);
 
         current.setName(property);
         System.out.println(current.getName()+" Has been sucsessfully edited");
 
     }
-   
+  
+    public int findMemberIndex (ArrayList<Member> list , String ID){
+        int index= 0;
+        for(int i = 0 ; i < list.size(); i++){
+           System.out.println("finding...");
+           System.out.println(list.get(i).getPhoneNum());
+            if ( list.get(i).getId()==ID){ 
+                index=i;  
+                System.out.println("found");
+                return index;         
+
+
+            }
+        
+
+        }
+    return index;
+    }
+    
     public Member findMember(ArrayList<Member> memeberList, String ID) {
-// Used to locate a Member object via ID parameter 
-        Member foundMember = new Member ();
-        for (Member member : memeberList) {
-            if (member.getId().equals(ID)) {
-                
-                foundMember.setName(member.getName());
-               
-
+        // Used to locate a Member object via ID parameter 
+               int index = findMemberIndex(memeberList, ID);
+        
+                return memberBook.get(index);
             }
-        }
-        return foundMember;
 
-        //return foundMember;
-    }
+            public void readMemberList(){
+                try {
+                    FileReader file = new FileReader("MemberList.csv");
+                    BufferedReader reader = new BufferedReader(file);
+                    String info = reader.readLine();
+                    while (info != null ){
+                        String[] elements= info.split(",");
+                        if (elements.length  < 5){
+                            throw new RuntimeException ("Line too short");//handle missing entrys 
+                        }
+                        String Name = elements[0];
+                        String ID = elements[1];
+                        String phoneNum = elements[2];
+                        String overdue= elements[3];
+                        String fineTot= elements [4];
+                        Member temp = new Member( Name , ID , phoneNum, overdue,fineTot);
+                        memberBook.add((Member)temp);
+            
+                        info = reader.readLine(); 
+                    }
+                    file.close();
+                } catch (Exception e) {
+                    System.out.println("FILE ERROR: "+e);}
+                    //TODO: handle exception
+                }
+            
 
-   public void readMemberList(){
-    try {
-        FileReader file = new FileReader("MemberList.csv");
-        BufferedReader reader = new BufferedReader(file);
-        String info = reader.readLine();
-        while (info != null ){
-            String[] elements= info.split(",");
-            if (elements.length  < 5){
-                throw new RuntimeException ("Line too short");//handle missing entrys 
-            }
-            String Name = elements[0];
-            String ID = elements[1];
-            String phoneNum = elements[2];
-            String overdue= elements[3];
-            String fineTot= elements [4];
-            Member temp = new Member( Name , ID , phoneNum, overdue,fineTot);
-            memeberBook.add((Member)temp);
 
-            info = reader.readLine(); 
-        }
-        file.close();
-    } catch (Exception e) {
-        System.out.println("FILE ERROR: "+e);
-        //TODO: handle exception
-    }
-
-   }
     public static void main(String[] args) {
 
         MemberPages yellow = new MemberPages();
+        Member test = new Member ( "jhon doe", "001", "1111","0","0");
+        Member test1 = new Member ( "paul doe", "002", "2222","0","0");
+        Member test2 = new Member ( "jane doe", "003", "3333","0","0");
+       // yellow.memberBook.add(test);
+       // yellow.memberBook.add(test1);
+       // yellow.memberBook.add(test2);
+       // yellow.dumpMember(yellow.findMember(yellow.memberBook, "3333"));
         yellow.readMemberList();
-        Member test = new Member ( "jhon doe", "000", "0","0","0");
-        yellow.memeberBook.add(test);
-        yellow.dumpMember(yellow.findMember(yellow.memeberBook,"000"));
+        yellow.dumpMember(yellow.findMember(yellow.memberBook, "978DF12"));
+        
+
 
     }
 }
