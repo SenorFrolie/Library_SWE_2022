@@ -13,15 +13,24 @@ public class Member {
         this.overdue = overdue;
         this.finetotal = finetotal;
     }
-
-    // Default Constructor 
-    public Member (){
-        name ="null";
-        id="null";
-        phoneNum="null";
-        overdue="null";
-        finetotal="null";
+    
+    public Member(){
+        this.name = "null1";
+        this.id = "null2";
+        this.phoneNum = "null3";
+        this.overdue = "null4";
+        this.finetotal = "null5";
     }
+
+    public Member (Member joe){
+        this.name = joe.name;
+        this.id = joe.id;
+        this.phoneNum = joe.phoneNum;
+        this.overdue = joe.overdue;
+        this.finetotal = joe.finetotal;;
+    }
+
+    
 
     public void setID(String id) {
         this.id = id;

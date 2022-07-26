@@ -36,16 +36,14 @@ public class MemberPages {
    
     public Member findMember(ArrayList<Member> memeberList, String ID) {
 // Used to locate a Member object via ID parameter 
-        Member foundMember = new Member();
-        
+        Member foundMember = new Member ();
         for (Member member : memeberList) {
             if (member.getId().equals(ID)) {
-                System.out.println("member: "+ member);
-
-                return foundMember;
+                
+                foundMember.setName(member.getName());
+               
 
             }
-
         }
         return foundMember;
 
@@ -83,8 +81,9 @@ public class MemberPages {
 
         MemberPages yellow = new MemberPages();
         yellow.readMemberList();
-        System.out.println(yellow.memeberBook);
-        yellow.dumpMember(yellow.findMember(yellow.memeberBook,"978DF12"));
+        Member test = new Member ( "jhon doe", "000", "0","0","0");
+        yellow.memeberBook.add(test);
+        yellow.dumpMember(yellow.findMember(yellow.memeberBook,"000"));
 
     }
 }
