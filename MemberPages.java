@@ -37,9 +37,8 @@ public class MemberPages {
     public int findMemberIndex (ArrayList<Member> list , String ID){
         int index= 0;
         for(int i = 0 ; i < list.size(); i++){
-           System.out.println("finding...");
-           System.out.println(list.get(i).getPhoneNum());
-            if ( list.get(i).getId()==ID){ 
+    
+            if ( list.get(i).getId().equals(ID)){ 
                 index=i;  
                 System.out.println("found");
                 return index;         
@@ -70,11 +69,12 @@ public class MemberPages {
                             throw new RuntimeException ("Line too short");//handle missing entrys 
                         }
                         String Name = elements[0];
-                        String ID = elements[1];
-                        String phoneNum = elements[2];
+                        String ID = elements[2];
+                        String phoneNum = elements[1];
                         String overdue= elements[3];
                         String fineTot= elements [4];
                         Member temp = new Member( Name , ID , phoneNum, overdue,fineTot);
+    
                         memberBook.add((Member)temp);
             
                         info = reader.readLine(); 
@@ -90,15 +90,9 @@ public class MemberPages {
     public static void main(String[] args) {
 
         MemberPages yellow = new MemberPages();
-        Member test = new Member ( "jhon doe", "001", "1111","0","0");
-        Member test1 = new Member ( "paul doe", "002", "2222","0","0");
-        Member test2 = new Member ( "jane doe", "003", "3333","0","0");
-       // yellow.memberBook.add(test);
-       // yellow.memberBook.add(test1);
-       // yellow.memberBook.add(test2);
-       // yellow.dumpMember(yellow.findMember(yellow.memberBook, "3333"));
         yellow.readMemberList();
-        yellow.dumpMember(yellow.findMember(yellow.memberBook, "978DF12"));
+        yellow.dumpMember(yellow.findMember(yellow.memberBook, "999SD55"));
+        //System.out.println(yellow.memberBook.get(yellow.findMemberIndex(yellow.memberBook, "999SD55")).getOverdue());
         
 
 
