@@ -7,10 +7,13 @@ public class TheSystem {
     public static void main(String[] args) throws IOException {
 
         Scanner sc = new Scanner(System.in);
+        BookShelf list = new BookShelf();
+        BookShelf listV = new BookShelf();
+        listV.readVideoMat();
+        list.readBookList();
+ 
         System.out.println("Where would you like to go? ");
         int user_input;
-
-        Ledger ledger = new Ledger();
 
         System.out.println("-------------------------------------------------");
         System.out.println("|            Welcome to our Library              |");
@@ -18,7 +21,6 @@ public class TheSystem {
         System.out.println("-------------------------------------------------");
 
         do {
-            
             System.out.println("\r\n");
             System.out.println("1. Browse ");
             System.out.println("2. Checkout ");
@@ -30,8 +32,8 @@ public class TheSystem {
             user_input = sc.nextInt();
 
             if (user_input == 1) {
-                BookShelf.book_Avaiable();
-
+                BookShelf.ShelfMainMenu();
+                
             } else if (user_input == 2) {
                 
             } else if (user_input == 3) {

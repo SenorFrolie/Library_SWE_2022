@@ -8,155 +8,164 @@ import java.util.Scanner;
 
 
 public class BookShelf {
+    static ArrayList<Books> dataList = new ArrayList<Books>();
+    static ArrayList<VisualMat> dataList_VS = new ArrayList<VisualMat>();
+    
 
-    // for reading a CSV file that contains the information on the books
-    static void book_Avaiable() throws IOException {
-        // String book_path = "Books.csv";
-        BufferedReader reader = null;
-        String line = "null";
+       // for reading a CSV file that contains the information on the books
+       public void readBookList() throws IOException {
+        // Processing Books.CSV into objects 
+        try {
+            FileReader fr = new FileReader("Books.csv");
+            BufferedReader br = new BufferedReader(fr);
+            String stringRead = br.readLine();
+
+            while (stringRead != null) {
+                String[] elements = stringRead.split(",");
+
+                if (elements.length < 4) {
+                    throw new RuntimeException("line too short"); // handle missing entries
+                }
+                
+                String Title = elements[0];
+                String Author = elements[1];
+                String Id = elements[2];
+                String BOTY = elements[3];
+                Books temp = new Books(Title, Author, Id, BOTY);
+
+                dataList.add((Books) temp);
+                // read the next line
+                stringRead = br.readLine();
+
+            }
+            br.close();
+
+        } catch (Exception e) {
+
+            System.out.println("ERROR: Invalid CSV file read. . .");
+            
+        }
+
+
+
+    }
+
+    // Print the Menu 
+    public static void ShelfMainMenu() throws IOException{
         Scanner sc = new Scanner(System.in);
-        int user_input;
+
 
         System.out.println("--------------------------------------");
         System.out.println("| Welcome to our hottest Selection! | ");
         System.out.println("--------------------------------------");
-
         System.out.println("would you rather check out Book or Visual Audio");
 
-        do {
+        //do {
+                System.out.println("\r\n");
+                System.out.println("1. Books ");
+                System.out.println("2. Visual ");
+                System.out.println("3. Return to Main Menu ");
+                System.out.println("0. Kill Program ");
 
-            System.out.println("\r\n");
-            System.out.println("1. Books ");
-            System.out.println("2. Visual ");
-            System.out.println("3. Return to Main Menu ");
-            System.out.println("0. Kill Program ");
+                int user_input = sc.nextInt();
+                int Filter_input = sc.nextInt();
 
-            user_input = sc.nextInt();
 
             if (user_input == 1) {
                 System.out.println("--------------------------------------");
-                System.out.println("|    You're in the book section        |");
+                System.out.println("|           book section              |");
+                System.out.println("--------------------------------------"); 
+
+                for(Books book:dataList){
+                    System.out.println(book.getTitle() + " by " + book.getAuthor());
+                }
+            }
+            else if(user_input == 2){
                 System.out.println("--------------------------------------");
+                System.out.println("|       Visual Audio section         | ");
+                System.out.println("--------------------------------------");
+                for(VisualMat book :dataList_VS){
+                    System.out.println(book.getTitle() + " by " + book.getDirector());
+                }
+                
+            }
 
-                List<Books> dataList = new ArrayList<Books>();
+        //} while (user_input != 0);
+    }
 
-                try {
-                    FileReader fr = new FileReader("Books.csv");
-                    BufferedReader br = new BufferedReader(fr);
-                    String stringRead = br.readLine();
+    
 
-                    while (stringRead != null) {
-                        String[] elements = stringRead.split(",");
+    public void readVideoMat(){
+   
 
-                        if (elements.length < 4) {
-                            throw new RuntimeException("line too short"); // handle missing entries
-                        }
-                        
-                        String Title = elements[0];
-                        String Author = elements[1];
-                        String Id = elements[2];
-                        String BOTY = elements[3];
+            // Procesing Visual.csv into objects 
 
-                        Books temp = new Books(Title, Author, Id, BOTY);
+            try {
+                FileReader frV = new FileReader("Visual.csv");
+                BufferedReader brV = new BufferedReader(frV);
+                String stringReadV = brV.readLine();
 
-                        dataList.add((Books) temp);
+                while (stringReadV != null) {
+                    String[] elementsV = stringReadV.split(",");
 
-                        // read the next line
-                        stringRead = br.readLine();
+                    if (elementsV.length < 3) {
+                        throw new RuntimeException("line too short"); // handle missing entries
+                    }
+
+                    String Title_V = elementsV[0];
+                    String Director = elementsV[1];
+                    String Id_V = elementsV[2];
+
+                    VisualMat temp_2 = new VisualMat(Title_V, Director, Id_V);
+
+                    dataList_VS.add((VisualMat) temp_2);
+
+                    // read the next line
+                    stringReadV = brV.readLine();
 
                     }
-                } catch (Exception e) {
+            } catch (Exception e) {
+                System.out.println("ERROR: Invalid CSV file read. . .");
+            }
+    }
 
-                }
-
-               /* for (Books items : dataList) {
-                    System.out.println(items.getAuthor());
-               }
-                */
-               System.out.println("How would you like it shown to you? ");
-               System.out.println("1: By Title");
-               System.out.println("2: Author");
-               System.out.println("3: Book of the Year");
-
-               user_input = sc.nextInt();
-               if(user_input == 1){
+    public void FilterBooks(int filter){
+        if(filter == 1){
             System.out.println("---------------------------");
+                
                 for (Books items : dataList) {
                     System.out.println(items.getTitle());
-                    
-               }
+                }
             System.out.println("---------------------------");
 
-
-
-             }else if(user_input == 2){
+            }else if(filter == 2){
             System.out.println("---------------------------");
                 for (Books items : dataList) {
                     System.out.println(items.getAuthor());
-               }
+                }
             System.out.println("---------------------------");
-             }
-             else if(user_input == 3){
+            }
+            else if(filter == 3){
             System.out.println("---------------------------");
                 for (Books items : dataList) {
                     if(items.getBOTY().equals("Y")){
                         System.out.println(items.getTitle() + " by "+ items.getAuthor());
-
                     }
                 }
             System.out.println("---------------------------");
+            }
+        }
 
+        public String findID(ArrayList<Books> list, String ID){
 
-             }
-
-               
-            } else if (user_input == 2) {
-                System.out.println("--------------------------------------");
-                System.out.println("|    You're in Visual Audio section    | ");
-                System.out.println("--------------------------------------");
-
-                List<VisualMat> dataList_VS = new ArrayList<VisualMat>();
-
-                try {
-                    FileReader fr = new FileReader("Visual.csv");
-                    BufferedReader br = new BufferedReader(fr);
-                    String stringRead = br.readLine();
-
-                    while (stringRead != null) {
-                        String[] elements = stringRead.split(",");
-
-                        if (elements.length < 3) {
-                            throw new RuntimeException("line too short"); // handle missing entries
-                        }
-
-                        String Title = elements[0];
-                        String Director = elements[1];
-                        String Id = elements[2];
-
-                        VisualMat temp_2 = new VisualMat(Title, Director, Id);
-
-                        dataList_VS.add((VisualMat) temp_2);
-
-                        // read the next line
-                        stringRead = br.readLine();
-
-                    }
-                } catch (Exception e) {
-                    // TODO: handle exception
+            for(int i = 0; i < list.size();i++){
+                if(list.get(i).getRefID() == ID){
+                    String found = ID;
+                    return found;
                 }
-
-
-
-                for (VisualMat items : dataList_VS) {
-                    System.out.println(items.getDirector());
-                }
-
-            }else if(user_input == 3){
-                return;
             }
 
-        } while (user_input != 0);
-        reader.close();
-    }
+            return "not Found";
+        }
 
 }
