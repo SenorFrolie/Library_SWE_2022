@@ -14,14 +14,15 @@ public class BookShelf {
 
        // for reading a CSV file that contains the information on the books
        public void readBookList() throws IOException {
+        FileReader fr = new FileReader("Books.csv");
+        BufferedReader br = new BufferedReader(fr);
         // Processing Books.CSV into objects 
         try {
-            FileReader fr = new FileReader("Books.csv");
-            BufferedReader br = new BufferedReader(fr);
-            String stringRead = br.readLine();
+            br.readLine(); // read first line to avoid displaying file header
+            String line = null;
 
-            while (stringRead != null) {
-                String[] elements = stringRead.split(",");
+            while ((line = br.readLine()) != null) {
+                String[] elements = line.split(",");
 
                 if (elements.length < 4) {
                     throw new RuntimeException("line too short"); // handle missing entries
@@ -34,8 +35,6 @@ public class BookShelf {
                 Books temp = new Books(Title, Author, Id, BOTY);
 
                 dataList.add((Books) temp);
-                // read the next line
-                stringRead = br.readLine();
 
             }
             br.close();
@@ -44,6 +43,8 @@ public class BookShelf {
 
             System.out.println("ERROR: Invalid CSV file read. . .");
             
+        } finally {
+            br.close();
         }
 
 
@@ -68,8 +69,6 @@ public class BookShelf {
                 System.out.println("0. Kill Program ");
 
                 int user_input = sc.nextInt();
-                int Filter_input = sc.nextInt();
-
 
             if (user_input == 1) {
                 System.out.println("--------------------------------------");
