@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
-//import java.util.StringTokenizer;
+import java.util.concurrent.TimeoutException;
+
 
 
 public class BookShelf {
     static ArrayList<Books> dataList = new ArrayList<Books>();
     static ArrayList<VisualMat> dataList_VS = new ArrayList<VisualMat>();
-    
 
        // for reading a CSV file that contains the information on the books
        public void readBookList() throws IOException {
@@ -23,7 +23,7 @@ public class BookShelf {
             while (stringRead != null) {
                 String[] elements = stringRead.split(",");
 
-                if (elements.length < 4) {
+                if (elements.length < 6) {
                     throw new RuntimeException("line too short"); // handle missing entries
                 }
                 
@@ -31,7 +31,10 @@ public class BookShelf {
                 String Author = elements[1];
                 String Id = elements[2];
                 String BOTY = elements[3];
-                Books temp = new Books(Title, Author, Id, BOTY);
+                String Quantity = elements[4];
+                String Value = elements[5];
+
+                Books temp = new Books(Title, Author, Id, BOTY,Quantity,Value);
 
                 dataList.add((Books) temp);
                 // read the next line
@@ -156,16 +159,58 @@ public class BookShelf {
             }
         }
 
-        public String findID(ArrayList<Books> list, String ID){
+        public String findID(String ID){
 
-            for(int i = 0; i < list.size();i++){
-                if(list.get(i).getRefID() == ID){
-                    String found = ID;
-                    return found;
+            for(int i = 0; i < dataList.size();i++){
+                if(dataList.get(i).getRefID().equals(ID)){
+
+                    return dataList.get(i).getTitle() + " " + ID;
                 }
             }
 
             return "not Found";
         }
 
+
+        public String SendBook(String BookTitle){
+            // for(Books items : dataList){
+            //System.out.println(Title);
+            for(int i = 0; i < dataList.size();i++){
+                 //System.out.println(dataList.get(i).getTitle());
+                if(dataList.get(i).getTitle().equals(BookTitle)){
+                    return BookTitle;
+                }
+            }
+            return "Not Found";  
+        }
+
+
+        public boolean isBestSeller(String BookTitle){
+
+            for(int i = 0; i < dataList.size();i++){
+                //System.out.println(dataList.get(i).getTitle());
+               if( dataList.get(i).getTitle().equals(BookTitle) && dataList.get(i).getBOTY().equals("Y")){
+                   return true;
+               }
+           }
+           return false;  
+        }
+
+
+
+public static void main(String[] args) throws IOException {
+
+
+    BookShelf green = new BookShelf();
+
+    green.readBookList();
+    System.out.println(green.SendBook("Game of thrones"));
+    System.out.println(green.isBestSeller("Harry potter"));
+    System.out.println(green.findID("10"));
+
+
 }
+
+
+}
+
