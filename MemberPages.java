@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class MemberPages {
-// Bellow is the memberBook which stores each memeber Object that is bieng worked on or edited in the system. 
+    // Bellow is the memberBook which stores each memeber Object that is bieng worked on or edited in the system. 
     ArrayList<Member> memberBook = new ArrayList<Member>();
-
+    // Adds propertys to member objects
     public void addMemeber(Member newMember, String name, String id, String phoneNum) {
 
         // used to set the Basic Member propertys when creating a new member
@@ -14,7 +14,7 @@ public class MemberPages {
         newMember.setName(name);
         newMember.setphoneNum(phoneNum);
     }
-
+    // Dumps the contents of a Member object to screen
     public void dumpMember(Member currentMember) {
 // Dumps a Member object information to terminal 
         System.out.println(currentMember.getName());
@@ -24,16 +24,35 @@ public class MemberPages {
         System.out.println(currentMember.getFineTotal());
 
     }
-
-    public void editMemeber (String property, String ID){
+    // edits any property of a member with given property type and the replacement property 
+    public void editMemeber (String property,String newProp, String ID){
         // Used to edit a member property via findMember method and ID
         Member current =findMember(memberBook, ID);
 
-        current.setName(property);
         System.out.println(current.getName()+" Has been sucsessfully edited");
 
+        switch (property){
+            case "name":
+            current.setName(newProp);
+            break;
+
+            case "phone number":
+            current.setphoneNum(newProp);
+            break;
+
+            case "overdue":
+            current.setOverdue(newProp);
+            break;
+
+            case "fine total":
+            current.setFineTotal(newProp);
+            break;
+
+
+        }
+
     }
-  
+    // Finds a Member object index in the array list by property 
     public int findMemberIndex (ArrayList<Member> list , String ID){
         int index= 0;
         for(int i = 0 ; i < list.size(); i++){
@@ -50,15 +69,15 @@ public class MemberPages {
         }
     return index;
     }
-    
+    // Works with findMemebrIndex to return a member object from the Array List 
     public Member findMember(ArrayList<Member> memeberList, String ID) {
         // Used to locate a Member object via ID parameter 
                int index = findMemberIndex(memeberList, ID);
         
                 return memberBook.get(index);
             }
-
-            public void readMemberList(){
+    // Reads member information into Member objects which are stored in the Array list        
+    public void readMemberList(){
                 try {
                     FileReader file = new FileReader("MemberList.csv");
                     BufferedReader reader = new BufferedReader(file);
@@ -84,16 +103,19 @@ public class MemberPages {
                     System.out.println("FILE ERROR: "+e);}
                     //TODO: handle exception
                 }
-            
+    //Writes to the CSV File the contents of a member for storage       
+    public void writeToMemberList(){
+        
 
-
+    }
     public static void main(String[] args) {
 
         MemberPages yellow = new MemberPages();
         yellow.readMemberList();
-        yellow.dumpMember(yellow.findMember(yellow.memberBook, "999SD55"));
+        //yellow.dumpMember(yellow.findMember(yellow.memberBook, "999SD55"));
         //System.out.println(yellow.memberBook.get(yellow.findMemberIndex(yellow.memberBook, "999SD55")).getOverdue());
-        
+        //yellow.editMemeber("fine total", "$0", "999SD55");
+        //System.out.println(yellow.memberBook.get(yellow.findMemberIndex(yellow.memberBook, "999SD55")).getFineTotal());
 
 
     }
