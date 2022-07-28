@@ -77,13 +77,14 @@ public class MemberPages {
                 return memberBook.get(index);
             }
     // Reads member information into Member objects which are stored in the Array list        
-    public void readMemberList(){
+            public void readMemberList() throws IOException {
+                FileReader file = new FileReader("MemberList.csv");
+                BufferedReader reader = new BufferedReader(file);
                 try {
-                    FileReader file = new FileReader("MemberList.csv");
-                    BufferedReader reader = new BufferedReader(file);
-                    String info = reader.readLine();
-                    while (info != null ){
-                        String[] elements= info.split(",");
+                    reader.readLine();
+                    String line = null;
+                    while ((line = reader.readLine()) != null ){
+                        String[] elements= line.split(",");
                         if (elements.length  < 5){
                             throw new RuntimeException ("Line too short");//handle missing entrys 
                         }
@@ -95,20 +96,22 @@ public class MemberPages {
                         Member temp = new Member( Name , ID , phoneNum, overdue,fineTot);
     
                         memberBook.add((Member)temp);
-            
-                        info = reader.readLine(); 
                     }
-                    file.close();
                 } catch (Exception e) {
-                    System.out.println("FILE ERROR: "+e);}
+                    System.out.println("FILE ERROR: "+e);
+                } finally {
+                    reader.close();
+                }
                     //TODO: handle exception
                 }
     //Writes to the CSV File the contents of a member for storage       
     public void writeToMemberList(){
-        
+            } 
+            
 
     }
-    public static void main(String[] args) {
+
+    public static void main(String[] args) throws IOException {
 
         MemberPages yellow = new MemberPages();
         yellow.readMemberList();
