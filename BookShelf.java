@@ -24,8 +24,6 @@ public class BookShelf {
             while ((line = br.readLine()) != null) {
                 String[] elements = line.split(",");
 
-                System.out.println("line: "+line);
-
                 if (elements.length < 4) {
                     throw new RuntimeException("line too short"); // handle missing entries
                 }
