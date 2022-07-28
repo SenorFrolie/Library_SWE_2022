@@ -59,13 +59,14 @@ public class MemberPages {
                 return memberBook.get(index);
             }
 
-            public void readMemberList(){
+            public void readMemberList() throws IOException {
+                FileReader file = new FileReader("MemberList.csv");
+                BufferedReader reader = new BufferedReader(file);
                 try {
-                    FileReader file = new FileReader("MemberList.csv");
-                    BufferedReader reader = new BufferedReader(file);
-                    String info = reader.readLine();
-                    while (info != null ){
-                        String[] elements= info.split(",");
+                    reader.readLine();
+                    String line = null;
+                    while ((line = reader.readLine()) != null ){
+                        String[] elements= line.split(",");
                         if (elements.length  < 5){
                             throw new RuntimeException ("Line too short");//handle missing entrys 
                         }
@@ -76,18 +77,18 @@ public class MemberPages {
                         String fineTot= elements [4];
                         Member temp = new Member( Name , ID , phoneNum, overdue,fineTot);
                         memberBook.add((Member)temp);
-            
-                        info = reader.readLine(); 
                     }
-                    file.close();
                 } catch (Exception e) {
-                    System.out.println("FILE ERROR: "+e);}
-                    //TODO: handle exception
+                    System.out.println("FILE ERROR: "+e);
+                } finally {
+                    reader.close();
                 }
+                    //TODO: handle exception
+            } 
             
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         MemberPages yellow = new MemberPages();
         Member test = new Member ( "jhon doe", "001", "1111","0","0");
