@@ -171,12 +171,19 @@ public class BookShelf {
         }
 
 
+
+
         public String SendBook(String BookTitle){
             // for(Books items : dataList){
             //System.out.println(Title);
             for(int i = 0; i < dataList.size();i++){
                  //System.out.println(dataList.get(i).getTitle());
                 if(dataList.get(i).getTitle().equals(BookTitle)){
+                    int j = Integer.parseInt(dataList.get(i).getQuantiy());
+                    j = j - 1;
+                    String k = Integer.toString(j);
+                    
+
                     return BookTitle;
                 }
             }
