@@ -48,7 +48,6 @@ public class TheSystem {
                     System.out.println("bookIDs" + bookIDs);
                     ledger.setLedger(libID, bookIDs);
                 }
-                //co_scanner.close();
 
                 
             } else if (user_input == 3) {
@@ -56,8 +55,9 @@ public class TheSystem {
             } else if (user_input == 4) {
 
                 System.out.println("What is your library ID? ");
-                Integer libID = sc.nextInt();
-                //Ledger.getLedger(libID);
+                int libID = sc.nextInt();
+                Ledger ledger = new Ledger();
+                System.out.println("Checkout history: " + ledger.getLedger(libID));
 
             }
 
