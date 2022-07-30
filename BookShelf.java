@@ -1,12 +1,8 @@
 import java.io.*;
 //import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.TimeoutException;
 import com.opencsv.*;
-import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
 
 
@@ -43,7 +39,7 @@ public class BookShelf {
             br.close();
 
         } catch (Exception e) {
-            System.out.println("ERROR: Invalid CSV file read. . .");
+            System.out.println("ERROR: Invalid books CSV file read. . .");
         } finally {
             br.close();
         }
@@ -71,13 +67,13 @@ public class BookShelf {
                 VisualMat temp_2 = new VisualMat(Title_V, Director, Id_V);
 
                 dataList_VS.add((VisualMat) temp_2);
-
+                
                 // read the next line
                 stringReadV = brV.readLine();
-
+                brV.close();
                 }
         } catch (Exception e) {
-            System.out.println("ERROR: Invalid CSV file read. . .");
+            System.out.println("ERROR: Invalid Visual read CSV file read. . .");
         }
 }
 
@@ -85,7 +81,7 @@ public class BookShelf {
     // Print the Menu 
     public static void ShelfMainMenu() throws IOException{
         Scanner sc = new Scanner(System.in);
-        BookShelf books = new BookShelf();
+       // BookShelf books = new BookShelf();
 
         System.out.println("--------------------------------------");
         System.out.println("| Welcome to our hottest Selection! | ");
@@ -124,11 +120,14 @@ public class BookShelf {
                 
             }
             else if(user_input == 3){
+                sc.close();
                 return;
+
             }
             else if(user_input == 4){
                 requestNewBook();
             }
+            sc.close();
 
         //} while (user_input != 0);
     }
@@ -145,6 +144,7 @@ public class BookShelf {
         System.out.println("Would you like to filter the selection: 1/0");
         int Answer = sc.nextInt();
         if(Answer == 0){
+            sc.close();
             return;
         }
         else{
@@ -180,9 +180,11 @@ public class BookShelf {
             System.out.println("---------------------------");
             }
         }
+        sc.close();
     }
 
-        public String findID(String ID){
+    
+        public static String findID(String ID){
             for(int i = 0; i < dataList.size();i++){
                if(dataList.get(i).getRefID().equals(ID)){
                    String part = dataList.get(i).getRefID();
@@ -212,10 +214,11 @@ public class BookShelf {
             for(int i = 0; i < dataList.size();i++){
                  //System.out.println(dataList.get(i).getTitle());
                 if(dataList.get(i).getTitle().equals(BookTitle)){
-                   // String old_Quant_value = dataList.get(i).getQuantiy();
-                    //int j = Integer.parseInt(dataList.get(i).getQuantiy());
-                    //j = j - 1;
-                    //String new_Quant_value = Integer.toString(j);
+
+                    int j = Integer.parseInt(dataList.get(i).getQuantiy());
+                    j = j - 1;
+                    String new_Quant_value = Integer.toString(j);
+                    editQuantity(new_Quant_value, dataList.get(i).getRefID());
                     
                    // updateCSV("Books.csv", new_Quant_value, old_Quant_value ,BookTitle);
 
@@ -237,10 +240,13 @@ public class BookShelf {
            return false;  
         }
 
-        public static String requestNewBook() throws IOException{
+        public static void requestNewBook() throws IOException{
+            System.out.println("---------------------------------------");
             System.out.println("Is this a Book or Visual Material? ");
             System.out.println("1: Book ");
             System.out.println("2: Visual Material ");
+            System.out.println("---------------------------------------");
+
             Scanner sc = new Scanner(System.in);
             int Answer = sc.nextInt();
             if(Answer == 1){
@@ -251,16 +257,14 @@ public class BookShelf {
                 System.out.print("Title and Author: " );
                 String Title = sc.next();
                 String requested = Title + " (requested)";
-
                 CSVWriter writer = new CSVWriter(new FileWriter(booksrc, true));
                
                 String [] record = requested.split(",");
                 writer.writeNext(record);
 
                 writer.close();
-
-
-            }else{
+            }
+            else{
                 String Visualsrc = "Visual.csv";
                 System.out.println("Please enter the necessary infomation. ");
                 System.out.println("---------------------------------------");
@@ -274,14 +278,41 @@ public class BookShelf {
                 String [] record = requested.split(",");
                 writer.writeNext(record);
                 writer.close();
-
-
+                sc.close();
             }
-
-            return null;
         }
 
+
+
+    public void editQuantity(String property, String ID){
+        // Used to edit a member property via findMember method and ID
+        Books current = findMember(ID);
+        current.setQuantiy(property);
+        System.out.println(current.getTitle()+" Has been sucsessfully edited");
+
+
+    }
+
+    public Books findMember(String ID) {
+        // Used to locate a Member object via ID parameter 
+               int index = findMemberIndex(ID);
+                return dataList.get(index);
+            }
+
+    public int findMemberIndex (String ID){
+            int index= 0;
+            for(int i = 0 ; i < dataList.size(); i++){
+               System.out.println("finding...");
+                if ( dataList.get(i).getRefID()==ID){ 
+                    index=i;  
+                    System.out.println("found");
+                    return index;         
+                }      
+            }
+        return index;
+        }
         
+
 
 /*
         public static void updateCSV(String fileToUpdate, String new_Quant_value, String old_Quant_value ,String BookTitle) throws IOException, CsvException {
@@ -319,13 +350,15 @@ public static void main(String[] args) throws IOException, CsvException {
 
     green.readBookList();
     //Test for sending a book if we have it in Books.csv
-    System.out.println(green.SendBook("New Paper"));
+    System.out.println(green.SendBook("Harry potter"));
 
     // Test if a book is a best seller, should either return Y for best seller and false otherwise
     System.out.println(green.isBestSeller("Harry potter"));
     
-     //Testing for a Reference Material, Should return "Can't checkout reference material"
+    //Testing for a Reference Material, Should return "Can't checkout reference material"
     System.out.println(green.findID("RM.15"));
+
+    
 
 
 }

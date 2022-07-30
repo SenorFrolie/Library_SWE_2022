@@ -35,5 +35,27 @@ public class Books  {
     public String getValue(){
         return Value;
     }
+
+    public void setTitle(String Title){
+        this.Title = Title;
+    }
+
+    public void setAuthor(String Author){
+        this.Author = Author;
+    }
+    public void setRefID(String RefID){
+        this.RefID = RefID;
+    }
+
+    public void setBOTY(String BOTY){
+        this.BOTY = BOTY;
+    }
+    public void setQuantiy(String Quantiy){
+        this.Quantity = Quantiy;
+    }
+    public void setValue(String Value){
+        this.Value =Value;
+    }
+
 }
 
