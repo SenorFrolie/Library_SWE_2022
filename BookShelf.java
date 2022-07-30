@@ -205,6 +205,28 @@ public class BookShelf {
             return "not Found";
         }
 
+            
+        public static String findVMID(String ID){
+            for(int i = 0; i < dataList_VS.size();i++){
+               if(dataList_VS.get(i).getRefID().equals(ID)){
+                   String part = dataList_VS.get(i).getRefID();
+                  // System.out.println(part);
+                   String []parts = part.split("\\.");
+                   String part1 = parts[0];
+                   System.out.println(part1);
+
+                   if(part1.equals("RM"))
+                   return "Can't checkout reference material";
+                   
+               }
+
+                if(dataList_VS.get(i).getRefID().equals(ID)){
+                    return dataList_VS.get(i).getTitle() + " " + dataList_VS.get(i).getRefID();
+                }
+            }
+            return "not Found";
+        }
+
 
 
 
@@ -344,8 +366,6 @@ public class BookShelf {
 
 
 public static void main(String[] args) throws IOException, CsvException {
-
-
     BookShelf green = new BookShelf();
 
     green.readBookList();
@@ -356,12 +376,9 @@ public static void main(String[] args) throws IOException, CsvException {
     System.out.println(green.isBestSeller("Harry potter"));
     
     //Testing for a Reference Material, Should return "Can't checkout reference material"
-    System.out.println(green.findID("RM.15"));
+    System.out.println(BookShelf.findID("RM.15"));
 
-    
-
-
-}
+    }
 
 }
 
