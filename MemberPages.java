@@ -1,7 +1,10 @@
 import java.io.*;
 import java.util.Scanner;
+import com.opencsv.CSVWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.io.FileWriter;
+
 
 public class MemberPages {
     // Bellow is the memberBook which stores each memeber Object that is bieng worked on or edited in the system. 
@@ -27,7 +30,7 @@ public class MemberPages {
     // edits any property of a member with given property type and the replacement property 
     public void editMemeber (String property,String newProp, String ID){
         // Used to edit a member property via findMember method and ID
-        Member current =findMember(memberBook, ID);
+        Member current =findMember(ID);
 
         System.out.println(current.getName()+" Has been sucsessfully edited");
 
@@ -52,12 +55,24 @@ public class MemberPages {
         }
 
     }
+    //Finds out if a member is a child or an Adult 
+    public boolean isChild(String ID){
+
+    if ( ID.charAt(0) =='C')
+    {
+        return true;
+    }
+    else{
+        return false;
+
+    }
+    }
     // Finds a Member object index in the array list by property 
-    public int findMemberIndex (ArrayList<Member> list , String ID){
+    public int findMemberIndex (String ID){
         int index= 0;
-        for(int i = 0 ; i < list.size(); i++){
+        for(int i = 0 ; i < memberBook.size(); i++){
     
-            if ( list.get(i).getId().equals(ID)){ 
+            if ( memberBook.get(i).getId().equals(ID)){ 
                 index=i;  
                 System.out.println("found");
                 return index;         
@@ -70,9 +85,9 @@ public class MemberPages {
     return index;
     }
     // Works with findMemebrIndex to return a member object from the Array List 
-    public Member findMember(ArrayList<Member> memeberList, String ID) {
+    public Member findMember(String ID) {
         // Used to locate a Member object via ID parameter 
-               int index = findMemberIndex(memeberList, ID);
+               int index = findMemberIndex(ID);
         
                 return memberBook.get(index);
             }
@@ -104,20 +119,18 @@ public class MemberPages {
                 }
                     //TODO: handle exception
                 }
-    //Writes to the CSV File the contents of a member for storage       
-    public void writeToMemberList(){
-            } 
-            
 
-    }
+
+
+            
 
     public static void main(String[] args) throws IOException {
 
         MemberPages yellow = new MemberPages();
         yellow.readMemberList();
-        //yellow.dumpMember(yellow.findMember(yellow.memberBook, "999SD55"));
-        //System.out.println(yellow.memberBook.get(yellow.findMemberIndex(yellow.memberBook, "999SD55")).getOverdue());
-        //yellow.editMemeber("fine total", "$0", "999SD55");
+        yellow.dumpMember(yellow.findMember( "999SD55"));
+        //System.out.println(yellow.memberBook.get(yellow.findMemberIndex(yellow.memberBook, "999SD55")).getFineTotal());
+        //yellow.editMemeber("fine total", "$5.00", "999SD55");
         //System.out.println(yellow.memberBook.get(yellow.findMemberIndex(yellow.memberBook, "999SD55")).getFineTotal());
 
 
