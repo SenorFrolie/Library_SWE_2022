@@ -8,7 +8,7 @@ import java.io.FileWriter;
 
 public class MemberPages {
     // Bellow is the memberBook which stores each memeber Object that is bieng worked on or edited in the system. 
-    ArrayList<Member> memberBook = new ArrayList<Member>();
+    static ArrayList<Member> memberBook = new ArrayList<Member>();
     // Adds propertys to member objects
     public void addMemeber(Member newMember, String name, String id, String phoneNum) {
 
@@ -68,7 +68,7 @@ public class MemberPages {
     }
     }
     // Finds a Member object index in the array list by property 
-    public int findMemberIndex (String ID){
+    public static int findMemberIndex (String ID){
         int index= 0;
         for(int i = 0 ; i < memberBook.size(); i++){
     
@@ -85,14 +85,14 @@ public class MemberPages {
     return index;
     }
     // Works with findMemebrIndex to return a member object from the Array List 
-    public Member findMember(String ID) {
+    public static Member findMember(String ID) {
         // Used to locate a Member object via ID parameter 
                int index = findMemberIndex(ID);
         
                 return memberBook.get(index);
             }
     // Reads member information into Member objects which are stored in the Array list        
-            public void readMemberList() throws IOException {
+    public void readMemberList() throws IOException {
                 FileReader file = new FileReader("MemberList.csv");
                 BufferedReader reader = new BufferedReader(file);
                 try {
@@ -120,7 +120,9 @@ public class MemberPages {
                     //TODO: handle exception
                 }
 
-
+                
+                
+    
 
             
 
@@ -128,7 +130,7 @@ public class MemberPages {
 
         MemberPages yellow = new MemberPages();
         yellow.readMemberList();
-        yellow.dumpMember(yellow.findMember( "999SD55"));
+        yellow.dumpMember(findMember( "999SD55"));
         //System.out.println(yellow.memberBook.get(yellow.findMemberIndex(yellow.memberBook, "999SD55")).getFineTotal());
         //yellow.editMemeber("fine total", "$5.00", "999SD55");
         //System.out.println(yellow.memberBook.get(yellow.findMemberIndex(yellow.memberBook, "999SD55")).getFineTotal());
