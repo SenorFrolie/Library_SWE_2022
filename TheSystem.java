@@ -35,16 +35,29 @@ public class TheSystem {
                 BookShelf.ShelfMainMenu();
                 
             } else if (user_input == 2) {
+
+                Ledger ledger = new Ledger();
+                Scanner co_scanner = new Scanner(System.in).useDelimiter(" ");
+                String prompt 
+                = "Enter your library ID followed by book ID(s)"
+                +"\nExample: \n1\n1 5 7";
+                System.out.println(prompt);
+                if (co_scanner.hasNextLine()) {
+                    String libID = co_scanner.nextLine();
+                    String bookIDs = co_scanner.nextLine();
+                    System.out.println("bookIDs" + bookIDs);
+                    ledger.setLedger(libID, bookIDs);
+                }
+
                 
             } else if (user_input == 3) {
 
             } else if (user_input == 4) {
 
                 System.out.println("What is your library ID? ");
-                Integer libID = sc.nextInt();
-                Ledger.getLedger(libID);
-
-            } else if (user_input == 5) {
+                int libID = sc.nextInt();
+                Ledger ledger = new Ledger();
+                System.out.println("Checkout history: " + ledger.getLedger(libID));
 
             }
 

@@ -1,5 +1,8 @@
-﻿Title,Author ,Id,Best seller
-Harry potter,J k Rowling,1,Y
-Game of thrones,G R R Martin,2,N
-Lord Of The Rings,J R R Tolkien,3,N
-Looking for Alaska ,Hank Green ,4,Y
+﻿Title,Author ,Id,Best seller,Quantity ,Value
+Harry potter,J k Rowling,10,Y,15,$10 
+Game of thrones,G R R Martin,11,N,14,$10 
+Lord Of The Rings,J R R Tolkien,12,N,6,$10 
+Looking for Alaska ,Hank Green ,13,Y,14,$10 
+Public Documents,San Marcos City ,RM.14,N,5,$10 
+New Paper,Cnn,RM.15,N,8,$10
+
