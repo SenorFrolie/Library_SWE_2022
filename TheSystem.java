@@ -25,6 +25,26 @@ public class TheSystem {
         System.out.println("You owe $"+currentMember.getFineTotal()+" in fines");
         System.out.println("Address : " + currentMember.getAddress());
     }
+// Assigns due date based on item type
+    public static int  assignDueDate (String itemType ) {
+        int duedate=0;
+
+        switch (itemType){
+
+        case ("book"):
+
+        duedate= 21;
+        break;
+
+        case ("BestBookVideo"):
+        duedate = 14;
+        break;
+        }
+        return duedate;
+
+    }
+// Checks out a book
+
 
     public static void main(String[] args) throws IOException {
 
@@ -33,6 +53,13 @@ public class TheSystem {
         BookShelf listV = new BookShelf();
         listV.readVideoMat();
         list.readBookList();
+        MemberPages.readMemberList();
+
+        //test area -----------------------------------------
+
+        Checkout.startCheckOut();
+
+        //--------------------------------------------
  
         System.out.println("Where would you like to go? ");
         int user_input;

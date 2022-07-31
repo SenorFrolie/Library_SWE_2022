@@ -11,20 +11,40 @@ import com.opencsv.exceptions.CsvException;
 
 
 public class Checkout{
-    // would you like to checkout book or visual material?
-    public void startCheckOut(){
-        
-        //check if user has fees (ledger)
-        //then while(fees == 0) continue checkout
-        
+//verify user fees
+public static boolean checkforFees(String ID){
 
-        do{
+    String userFees = MemberPages.findMember(TheSystem.ID).getFineTotal();
+
+    if (userFees.equals("0")){
+        return false;
+    }
+    else{
+
+        System.out.println("Checkout Failed Outstanding Fees");
+        return true;
+    }
+
+
+}
+
+
+    // would you like to checkout book or visual material?
+public static  void startCheckOut(){
+        
+        //check if user has fees 
+        //then while(fees == 0) continue checkout
+        int user_input;
+        checkforFees(TheSystem.ID);
+      
+
+        do{ 
             System.out.println("\nWould you like to checkout a book or visual material?");
             System.out.println("1. Book");
             System.out.println("2. Visual Material");
 
             Scanner sc = new Scanner(System.in);
-            int user_input;
+           
 
             user_input = sc.nextInt();
 
@@ -56,7 +76,7 @@ public class Checkout{
                     //request option from ...
                 }
             }
-        }
+        }while (user_input != 3);
         
 
     }
@@ -77,19 +97,20 @@ public class Checkout{
 
 
 
-public void bookCheckOut(String bookId){
+public static void bookCheckOut(String bookId){
 
     Scanner sc = new Scanner(System.in);
     
     //Check if available
-
+int user_input;
     do{
         System.out.println("\nWould you like to checkout: " + bookId);
         System.out.println("1. Checkout");
         System.out.println("2. Look for different option (back)");
         System.out.println("3. Log Out");
+        user_input = sc.nextInt();
 
-        int user_input = sc.nextInt();
+        
         
         if(user_input == 1){
             //assign book to user with ledger
@@ -99,33 +120,28 @@ public void bookCheckOut(String bookId){
         else if(user_input == 2){
             startCheckOut();
         }
-        else if(user_input == 3){
-            String[] args;
-            TheSystem.main(args);
-        }
+        
         else{
             System.out.println("please choose one of the options");
         }
-    while(user_input != 0){
+   
 
-    }
-
-}
+} while(user_input != 3);
 }
 
-public void visualCheckOut(String visualID){
+public static void visualCheckOut(String visualID){
 
     Scanner sc = new Scanner(System.in);
     
     //Check if available
-
+    int user_input;
     do{
         System.out.println("\nWould you like to checkout: " + visualID);
         System.out.println("1. Checkout");
         System.out.println("2. Look for different option (back)");
         System.out.println("3. Log Out");
 
-        int user_input = sc.nextInt();
+        user_input = sc.nextInt();
         
         if(user_input == 1){
             //assign visual to user with ledger
@@ -135,16 +151,10 @@ public void visualCheckOut(String visualID){
         else if(user_input == 2){
             startCheckOut();
         }
-        else if(user_input == 3){
-            String[] args;
-            TheSystem.main(args);
-        }
+       
         else{
             System.out.println("please choose one of the options");
         }
-    while(user_input != 0){
-
-    }
-}
+}while(user_input != 3);
 }
 }

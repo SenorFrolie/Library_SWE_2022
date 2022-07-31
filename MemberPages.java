@@ -99,7 +99,7 @@ public class MemberPages {
             }
 
             // Reads member information into Member objects which are stored in the Array list        
-            public void readMemberList() throws IOException {
+            public static void readMemberList() throws IOException {
                 FileReader file = new FileReader("MemberList.csv");
                 BufferedReader reader = new BufferedReader(file);
                 try {
