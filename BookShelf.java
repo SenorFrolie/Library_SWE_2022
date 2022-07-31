@@ -197,7 +197,8 @@ public class BookShelf {
                    return "Can't checkout reference material";   
                }
                 if(dataList.get(i).getRefID().equals(ID)){
-                    return dataList.get(i).getTitle() + " " + dataList.get(i).getRefID();
+                    return "Available";
+                    //return dataList.get(i).getTitle() + " " + dataList.get(i).getRefID();
                 }
             }
             return "not Found";
@@ -219,7 +220,8 @@ public class BookShelf {
                }
 
                 if(dataList_VS.get(i).getRefID().equals(ID)){
-                    return dataList_VS.get(i).getTitle() + " " + dataList_VS.get(i).getRefID();
+                    return "Available";
+                    //return dataList_VS.get(i).getTitle() + " " + dataList_VS.get(i).getRefID();
                 }
             }
             return "not Found";

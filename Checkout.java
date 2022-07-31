@@ -50,30 +50,30 @@ public static  void startCheckOut(){
 
             if(user_input == 1){
                 System.out.println("Please enter book ID");
-                Scanner bookIdInput = new Scanner(System.in);
-
-                String bookidNum = bookIdInput.nextLine();
-                String availabality = BookShelf.findID(bookidNum);
-                if(availabality == "Available"){
-                bookCheckOut(bookidNum);
-                }
-                else if(availabality != "Available"){
-                    System.out.println("Book is not available");
-                    //request option from ...
+                try (Scanner bookIdInput = new Scanner(System.in)) {
+                    String bookidNum = bookIdInput.nextLine();
+                    String availabality = BookShelf.findID(bookidNum);
+                    if(availabality == "Available"){
+                    bookCheckOut(bookidNum);
+                    }
+                    else if(availabality != "Available"){
+                        System.out.println("Book is not available");
+                        //request option from ...
+                    }
                 }
             }
             if(user_input == 2){
                 System.out.println("Please enter visual ID");
-                Scanner visualIdInput = new Scanner(System.in);
-
-                String bookidNum = visualIdInput.nextLine();
-                String availabality = BookShelf.findID(bookidNum);
-                if(availabality == "Available"){
-                visualCheckOut(bookidNum);
-                }
-                else if(availabality != "Available"){
-                    System.out.println("Visual Material is not available");
-                    //request option from ...
+                try (Scanner visualIdInput = new Scanner(System.in)) {
+                    String visualidNum = visualIdInput.nextLine();
+                    String availabality = BookShelf.findVMID(visualidNum);
+                    if(availabality == "Available"){
+                    visualCheckOut(visualidNum);
+                    }
+                    else if(availabality != "Available"){
+                        System.out.println("Visual Material is not available");
+                        //request option from ...
+                    }
                 }
             }
         }while (user_input != 3);
