@@ -10,21 +10,24 @@ public class MemberPages {
     // Bellow is the memberBook which stores each memeber Object that is bieng worked on or edited in the system. 
     static ArrayList<Member> memberBook = new ArrayList<Member>();
     // Adds propertys to member objects
-    public void addMemeber(Member newMember, String name, String id, String phoneNum) {
+    public void addMemeber(Member newMember, String name, String id, String phoneNum, String address) {
 
         // used to set the Basic Member propertys when creating a new member
         newMember.setID(id);
         newMember.setName(name);
         newMember.setphoneNum(phoneNum);
+        newMember.setAddress(address);
     }
     // Dumps the contents of a Member object to screen
     public void dumpMember(Member currentMember) {
 // Dumps a Member object information to terminal 
-        System.out.println(currentMember.getName());
-        System.out.println(currentMember.getId());
-        System.out.println(currentMember.getPhoneNum());
-        System.out.println(currentMember.getOverdue());
-        System.out.println(currentMember.getFineTotal());
+        System.out.println("Member name : " + currentMember.getName());
+        System.out.println("Library ID :" + currentMember.getId());
+        System.out.println("Phone Number :" + currentMember.getPhoneNum());
+        System.out.println("Address: " + currentMember.getAddress());
+        System.out.println("Is a Child : " + isChild(currentMember.getId()));
+        System.out.println("# of Overdue Items :" + currentMember.getOverdue());
+        System.out.println("Ammount of Fines Accrued:$" + currentMember.getFineTotal());
 
     }
     // edits any property of a member with given property type and the replacement property 
@@ -51,12 +54,16 @@ public class MemberPages {
             current.setFineTotal(newProp);
             break;
 
+            case "address":
+            current.setAddress(newProp);
+            break;
+
 
         }
 
     }
     //Finds out if a member is a child or an Adult 
-    public boolean isChild(String ID){
+    public static boolean isChild(String ID){
 
     if ( ID.charAt(0) =='C')
     {
@@ -74,7 +81,6 @@ public class MemberPages {
     
             if ( memberBook.get(i).getId().equals(ID)){ 
                 index=i;  
-                System.out.println("found");
                 return index;         
 
 
@@ -100,15 +106,16 @@ public class MemberPages {
                     String line = null;
                     while ((line = reader.readLine()) != null ){
                         String[] elements= line.split(",");
-                        if (elements.length  < 5){
+                        if (elements.length  < 6){
                             throw new RuntimeException ("Line too short");//handle missing entrys 
                         }
                         String Name = elements[0];
                         String ID = elements[2];
-                        String phoneNum = elements[1];
-                        String overdue= elements[3];
-                        String fineTot= elements [4];
-                        Member temp = new Member( Name , ID , phoneNum, overdue,fineTot);
+                        String phoneNum = elements[3];
+                        String address = elements[1];
+                        String overdue= elements[4];
+                        String fineTot= elements [5];
+                        Member temp = new Member( Name , ID , phoneNum,address,overdue,fineTot);
     
                         memberBook.add((Member)temp);
                     }
@@ -120,21 +127,4 @@ public class MemberPages {
                     //TODO: handle exception
                 }
 
-                
-                
-    
-
-            
-
-    public static void main(String[] args) throws IOException {
-
-        MemberPages yellow = new MemberPages();
-        yellow.readMemberList();
-        yellow.dumpMember(findMember( "999SD55"));
-        //System.out.println(yellow.memberBook.get(yellow.findMemberIndex(yellow.memberBook, "999SD55")).getFineTotal());
-        //yellow.editMemeber("fine total", "$5.00", "999SD55");
-        //System.out.println(yellow.memberBook.get(yellow.findMemberIndex(yellow.memberBook, "999SD55")).getFineTotal());
-
-
-    }
 }
