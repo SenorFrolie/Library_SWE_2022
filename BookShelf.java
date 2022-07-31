@@ -194,10 +194,8 @@ public class BookShelf {
                    System.out.println(part1);
 
                    if(part1.equals("RM"))
-                   return "Can't checkout reference material";
-                   
+                   return "Can't checkout reference material";   
                }
-
                 if(dataList.get(i).getRefID().equals(ID)){
                     return dataList.get(i).getTitle() + " " + dataList.get(i).getRefID();
                 }
@@ -251,11 +249,11 @@ public class BookShelf {
         }
 
 
-        public boolean isBestSeller(String BookTitle){
+        public boolean isBestSeller(String ID){
 
             for(int i = 0; i < dataList.size();i++){
                 //System.out.println(dataList.get(i).getTitle());
-               if( dataList.get(i).getTitle().equals(BookTitle) && dataList.get(i).getBOTY().equals("Y")){
+               if( dataList.get(i).getRefID().equals(ID) && dataList.get(i).getBOTY().equals("Y")){
                    return true;
                }
            }
@@ -333,9 +331,19 @@ public class BookShelf {
             }
         return index;
         }
+
+
+    public float BookPrice(String ID){
+        for(int i = 0 ; i < dataList.size();i++){
+            if(dataList.get(i).getRefID().equals(ID)){
+                float price = Float.parseFloat(dataList.get(i).getValue());
+                return price;
+            }
+        }
+        return 0;
+    }
+
         
-
-
 /*
         public static void updateCSV(String fileToUpdate, String new_Quant_value, String old_Quant_value ,String BookTitle) throws IOException, CsvException {
 
@@ -370,13 +378,16 @@ public static void main(String[] args) throws IOException, CsvException {
 
     green.readBookList();
     //Test for sending a book if we have it in Books.csv
-    System.out.println(green.SendBook("Harry potter"));
+    //System.out.println(green.SendBook("Harry potter"));
 
     // Test if a book is a best seller, should either return Y for best seller and false otherwise
-    System.out.println(green.isBestSeller("Harry potter"));
+    //System.out.println(green.isBestSeller("Harry potter"));
     
     //Testing for a Reference Material, Should return "Can't checkout reference material"
-    System.out.println(BookShelf.findID("RM.15"));
+    //System.out.println(BookShelf.findID("RM.15"));
+
+    //Tests to see if it returns the price of te book
+    System.out.println(green.BookPrice("10"));
 
     }
 
