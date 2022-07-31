@@ -13,14 +13,15 @@ import com.opencsv.exceptions.CsvException;
 public class ReturnItem{
     public void returnProcess(){
         //Display user items/ due dates/ fees etc (from ledger)
-
+        int user_input;
+        
         do{
             System.out.println("\nWould you like to return or renew an item?");
             System.out.println("1. Return");
             System.out.println("2. Renew");
 
+
             Scanner sc = new Scanner(System.in);
-            int user_input;
 
             user_input = sc.nextInt();
 
@@ -44,11 +45,12 @@ public class ReturnItem{
             if(user_input == 2){
                 //renew item from ledger
                 }
-            }
-        }
+            
+        
+        } while (user_input != 3);
         
 
-    }
+}
 
 
 //item return function

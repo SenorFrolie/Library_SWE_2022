@@ -3,19 +3,18 @@ public class Member {
     private String name;
     private String id;
     private String phoneNum;
+    private String address;
     private String overdue;
     private String finetotal;
 
-    public Member(String name , String phoneNum, String id, String overdue, String finetotal) {
+    public Member(String name, String phoneNum,String address, String id, String overdue, String finetotal) {
         this.name = name;
         this.id = id;
         this.phoneNum = phoneNum;
+        this.address = address;
         this.overdue = overdue;
         this.finetotal = finetotal;
     }
-    
-
-    
 
     public void setID(String id) {
         this.id = id;
@@ -27,6 +26,10 @@ public class Member {
 
     public void setphoneNum(String phoneNum) {
         this.phoneNum = phoneNum;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public void setOverdue(String overdue) {
@@ -47,6 +50,10 @@ public class Member {
 
     public String getPhoneNum() {
         return phoneNum;
+    }
+
+    public String getAddress() {
+        return address;
     }
 
     public String getOverdue() {
