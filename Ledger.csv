@@ -1,5 +1,5 @@
-libID, booksIDs, dateChecked, dateReturned, length, fines
-1,10 11 12
-2,2 4 6
-1,13 14 15
-1,hlwn scrm
+libID, booksIDs,bestSellers, dateChecked, dateReturned, length, fines
+A789321,10 11 12,15 65 75,0,0,0
+2,2 4 6,78 85 4 ,0,0,0
+1,13 14 15,78 52 95 ,0,0,0
+1,15 252 365d,74 52 62 ,0,0,0
