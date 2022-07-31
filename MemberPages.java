@@ -58,17 +58,17 @@ public class MemberPages {
     //Finds out if a member is a child or an Adult 
     public boolean isChild(String ID){
 
-    if ( ID.charAt(0) =='C')
-    {
-        return true;
-    }
-    else{
-        return false;
-
-    }
+        if ( ID.charAt(0) =='C')
+        {
+            return true;
+        }
+        else{
+            return false;
+    
+        }
     }
     // Finds a Member object index in the array list by property 
-    public static int findMemberIndex (String ID){
+    public int findMemberIndex (String ID){
         int index= 0;
         for(int i = 0 ; i < memberBook.size(); i++){
     
@@ -85,14 +85,15 @@ public class MemberPages {
     return index;
     }
     // Works with findMemebrIndex to return a member object from the Array List 
-    public static Member findMember(String ID) {
+    public Member findMember(String ID) {
         // Used to locate a Member object via ID parameter 
                int index = findMemberIndex(ID);
         
                 return memberBook.get(index);
             }
-    // Reads member information into Member objects which are stored in the Array list        
-    public void readMemberList() throws IOException {
+
+            // Reads member information into Member objects which are stored in the Array list        
+            public void readMemberList() throws IOException {
                 FileReader file = new FileReader("MemberList.csv");
                 BufferedReader reader = new BufferedReader(file);
                 try {
@@ -118,19 +119,24 @@ public class MemberPages {
                     reader.close();
                 }
                     //TODO: handle exception
-                }
 
-                
-                
-    
+            } 
 
-            
+    //Writes to the CSV File the contents of a member for storage       
+    public void writeToMemberList(){
+        
 
+    }
     public static void main(String[] args) throws IOException {
 
         MemberPages yellow = new MemberPages();
         yellow.readMemberList();
-        yellow.dumpMember(findMember( "999SD55"));
+        //System.out.println(yellow.memberBook.get(yellow.findMemberIndex(yellow.memberBook, "999SD55")).getFineTotal());
+        //yellow.editMemeber("fine total", "$5.00", "999SD55");
+        //yellow.dumpMember(yellow.findMember(yellow.memberBook, "999SD55"));
+        //System.out.println(yellow.memberBook.get(yellow.findMemberIndex(yellow.memberBook, "999SD55")).getOverdue());
+        //yellow.editMemeber("fine total", "$0", "999SD55");
+        yellow.dumpMember(yellow.findMember( "999SD55"));
         //System.out.println(yellow.memberBook.get(yellow.findMemberIndex(yellow.memberBook, "999SD55")).getFineTotal());
         //yellow.editMemeber("fine total", "$5.00", "999SD55");
         //System.out.println(yellow.memberBook.get(yellow.findMemberIndex(yellow.memberBook, "999SD55")).getFineTotal());
