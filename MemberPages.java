@@ -65,17 +65,17 @@ public class MemberPages {
     //Finds out if a member is a child or an Adult 
     public static boolean isChild(String ID){
 
-    if ( ID.charAt(0) =='C')
-    {
-        return true;
-    }
-    else{
-        return false;
-
-    }
+        if ( ID.charAt(0) =='C')
+        {
+            return true;
+        }
+        else{
+            return false;
+    
+        }
     }
     // Finds a Member object index in the array list by property 
-    public static int findMemberIndex (String ID){
+    public int findMemberIndex (String ID){
         int index= 0;
         for(int i = 0 ; i < memberBook.size(); i++){
     
@@ -91,14 +91,15 @@ public class MemberPages {
     return index;
     }
     // Works with findMemebrIndex to return a member object from the Array List 
-    public static Member findMember(String ID) {
+    public Member findMember(String ID) {
         // Used to locate a Member object via ID parameter 
                int index = findMemberIndex(ID);
         
                 return memberBook.get(index);
             }
-    // Reads member information into Member objects which are stored in the Array list        
-    public void readMemberList() throws IOException {
+
+            // Reads member information into Member objects which are stored in the Array list        
+            public void readMemberList() throws IOException {
                 FileReader file = new FileReader("MemberList.csv");
                 BufferedReader reader = new BufferedReader(file);
                 try {
@@ -125,6 +126,5 @@ public class MemberPages {
                     reader.close();
                 }
                     //TODO: handle exception
-                }
 
 }
