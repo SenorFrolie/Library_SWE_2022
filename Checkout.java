@@ -14,6 +14,9 @@ public class Checkout{
     // would you like to checkout book or visual material?
     public void startCheckOut(){
         
+        //check if user has fees (ledger)
+        //then while(fees == 0) continue checkout
+        
 
         do{
             System.out.println("\nWould you like to checkout a book or visual material?");
@@ -71,7 +74,7 @@ public class Checkout{
 //if available get due date for visual mat with visual mat id from ledger
 //assign visual mat to user with ledger
 //print reciept to user to show due date of visual mat
-}
+
 
 
 public void bookCheckOut(String bookId){
@@ -142,5 +145,6 @@ public void visualCheckOut(String visualID){
     while(user_input != 0){
 
     }
+}
 }
 }
