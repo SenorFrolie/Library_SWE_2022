@@ -75,7 +75,7 @@ public class MemberPages {
         }
     }
     // Finds a Member object index in the array list by property 
-    public int findMemberIndex (String ID){
+    public static int findMemberIndex (String ID){
         int index= 0;
         for(int i = 0 ; i < memberBook.size(); i++){
     
@@ -91,7 +91,7 @@ public class MemberPages {
     return index;
     }
     // Works with findMemebrIndex to return a member object from the Array List 
-    public Member findMember(String ID) {
+    public static  Member findMember(String ID) {
         // Used to locate a Member object via ID parameter 
                int index = findMemberIndex(ID);
         
@@ -127,4 +127,4 @@ public class MemberPages {
                 }
                     //TODO: handle exception
 
-}
+}}

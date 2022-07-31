@@ -4,6 +4,28 @@ import java.io.*;
 
 public class TheSystem {
 
+    public static String ID; 
+    public static boolean age;
+    //Set MemberPages 
+
+
+// Fetches Member Object form MemberPages 
+    public static  Member getMember ( String ID)
+    {
+        return MemberPages.findMember(ID);
+    }
+// Displays Member Profile to Screen
+    public static void seeProfile()
+    {
+        Member currentMember= getMember(ID);
+        System.out.println("Welcome " + currentMember.getName());
+        System.out.println("Library ID# :"+ currentMember.getId());
+        System.out.println("Phone Number :"+ currentMember.getPhoneNum());
+        System.out.println("You have " + currentMember.getOverdue()+" overdue items");
+        System.out.println("You owe $"+currentMember.getFineTotal()+" in fines");
+        System.out.println("Address : " + currentMember.getAddress());
+    }
+
     public static void main(String[] args) throws IOException {
 
         Scanner sc = new Scanner(System.in);
