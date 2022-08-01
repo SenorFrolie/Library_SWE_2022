@@ -279,7 +279,12 @@ public class BookShelf {
                 System.out.print("Title and Author: " );
                 String Title = sc.next();
                 String requested = Title + " (requested)";
-                CSVWriter writer = new CSVWriter(new FileWriter(booksrc, true));
+                //CSVWriter writer = new CSVWriter(new FileWriter(booksrc, true));
+                CSVWriter writer = new CSVWriter(new FileWriter(booksrc, true), ',',
+                                             CSVWriter.NO_QUOTE_CHARACTER,
+                                             CSVWriter.DEFAULT_ESCAPE_CHARACTER,
+                                             CSVWriter.DEFAULT_LINE_END);
+               
                
                 String [] record = requested.split(",");
                 writer.writeNext(record);
@@ -335,7 +340,7 @@ public class BookShelf {
         }
 
 
-    public float BookPrice(String ID){
+    public float BooksPrice(String ID){
         for(int i = 0 ; i < dataList.size();i++){
             if(dataList.get(i).getRefID().equals(ID)){
                 float price = Float.parseFloat(dataList.get(i).getValue());
@@ -380,16 +385,16 @@ public static void main(String[] args) throws IOException, CsvException {
 
     green.readBookList();
     //Test for sending a book if we have it in Books.csv
-    //System.out.println(green.SendBook("Harry potter"));
+    System.out.println(green.SendBook("Harry potter"));
 
     // Test if a book is a best seller, should either return Y for best seller and false otherwise
-    //System.out.println(green.isBestSeller("Harry potter"));
+    System.out.println(green.isBestSeller("Harry potter"));
     
     //Testing for a Reference Material, Should return "Can't checkout reference material"
-    //System.out.println(BookShelf.findID("RM.15"));
+    System.out.println(BookShelf.findID("RM.15"));
 
     //Tests to see if it returns the price of te book
-    System.out.println(green.BookPrice("10"));
+    System.out.println(green.BooksPrice("10"));
 
     }
 
