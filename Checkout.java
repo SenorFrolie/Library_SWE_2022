@@ -30,7 +30,7 @@ public static boolean checkforFees(String ID){
 
 
     // would you like to checkout book or visual material?
-public static  void startCheckOut(){
+public static void startCheckOut() throws IOException{
         
         //check if user has fees 
         //then while(fees == 0) continue checkout
@@ -97,12 +97,12 @@ public static  void startCheckOut(){
 
 
 
-public static void bookCheckOut(String bookId){
+public static void bookCheckOut(String bookId) throws IOException{
 
     Scanner sc = new Scanner(System.in);
     
     //Check if available
-int user_input;
+    int user_input;
     do{
         System.out.println("\nWould you like to checkout: " + bookId);
         System.out.println("1. Checkout");
@@ -116,20 +116,27 @@ int user_input;
             //assign book to user with ledger
             //print to confirm
             //ask next action
+            Ledger ledger = new Ledger();
+            String libID = TheSystem.ID;
+            if (ledger.setLedger(libID, bookId)){
+                System.out.println("You have successfully checked out: " + bookId+". \nReturning to main menu.\n");
+                TheSystem.mainMenu();
+            }
         }
         else if(user_input == 2){
             startCheckOut();
         }
         
-        else{
+        else if(user_input != 3 && user_input != 2 && user_input != 1){
             System.out.println("please choose one of the options");
         }
    
 
-} while(user_input != 3);
+    } while(user_input != 3);
+    TheSystem.logOut();
 }
 
-public static void visualCheckOut(String visualID){
+public static void visualCheckOut(String visualID) throws IOException{
 
     Scanner sc = new Scanner(System.in);
     
