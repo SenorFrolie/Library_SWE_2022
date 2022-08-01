@@ -1,5 +1,8 @@
 import java.io.*;
-import java.util.*; 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import com.opencsv.*;
 //import com.opencsv.CSVReader;
@@ -7,29 +10,82 @@ import com.opencsv.*;
 public class Ledger {
 
     //private static HashMap<Integer,ArrayList<String>> transactions = new HashMap<Integer,ArrayList<String>>();
-    ArrayList<String> checkedBooks = new ArrayList<>();
-    int currentChecked;
+    private static ArrayList<ArrayList<String>> checkedItems = new ArrayList<ArrayList<String>>();
+    private static ArrayList<ArrayList<String>> currentCheckedItems = new ArrayList<ArrayList<String>>();
+    private static String libID;
 
-    public ArrayList<String> getLedger(String libID) throws IOException {
+    public Ledger(String libID) {
+        Ledger.libID = libID;
+    }
+
+    public ArrayList<ArrayList<String>> getCheckedBooks() throws IOException {
+        return checkedItems;
+    }
+    public ArrayList<ArrayList<String>> getCurrentCheckedBooks() throws IOException {
+        return currentCheckedItems;
+    }
+
+    private String tsToDate(String ts) {
+        if (ts.equals("")) {
+            return "";
+        }
+        DateFormat formatter = new SimpleDateFormat("mm/dd/yyyy");
+        Calendar calendar = Calendar.getInstance();
+        long milliSeconds = Long.parseLong(ts.trim());
+        Date date = new Date(milliSeconds);
+        calendar.setTimeInMillis(milliSeconds);
+        return formatter.format(date);
+    }
+
+    private String getReturnDate(String date, int lengthDays) {
+        if (date.equals("")) {
+            return "";
+        }
+        DateFormat formatter = new SimpleDateFormat("mm/dd/yyyy");
+        Calendar calendar = Calendar.getInstance();
+        long dateCheckedMilliSeconds = Long.parseLong(date.trim());
+        int daysMilli = (int)TimeUnit.DAYS.toMillis(lengthDays);
+        //long returnDateInMilliSeconds = dateCheckedMilliSeconds + lengthDays;
+        //Date returnDate = new Date(dateCheckedMilliSeconds + days);
+        System.out.println("lengthDays: "+lengthDays);
+        System.out.println("daysMilli: "+daysMilli);
+        calendar.setTimeInMillis(dateCheckedMilliSeconds);
+        calendar.add(Calendar.MILLISECOND, daysMilli);
+        return formatter.format(calendar.getTimeInMillis());
+    }
+
+    public void getLedger() throws IOException {
         FileReader file = new FileReader("Ledger.csv");
         BufferedReader reader = new BufferedReader(file);
-        currentChecked = 0; // reset per library ID
         try {
             String line = null;
+            reader.readLine();//read to ignore header
             while ((line = reader.readLine()) != null ){
                 String[] data = line.split(",");
 
-                String bookID = data[1];
-                String dateChecked = data[2];
+                String itemID = data[1];
+                String dateChecked = data[2];                
                 String dateReturned = data[3];
-                String lengthDats = data[4];
+                int lengthDays = Integer.parseInt(data[4].trim());
                 String fine = data[5];
 
                 if (data[0].equals(String.valueOf(libID))) {
-                    if (dateReturned.equals("0")) {
-                        currentChecked++;
+                    BookShelf shelf = new BookShelf();
+                    String itemName = shelf.findBookByID(itemID);
+                    if (itemName.equals("")) {
+                        itemName = shelf.findVMByID(itemID);
                     }
-                    checkedBooks.add(bookID);
+                    ArrayList<String> bookCheckoutInfo = new ArrayList<>();
+                    bookCheckoutInfo.add(itemName);
+                    bookCheckoutInfo.add(tsToDate(dateChecked));
+                    bookCheckoutInfo.add(tsToDate(dateReturned));
+                    bookCheckoutInfo.add(getReturnDate(dateChecked, lengthDays));
+                    bookCheckoutInfo.add(fine);
+                    //check for currently checked out items
+                    if (dateReturned.equals("")) {
+                        currentCheckedItems.add(bookCheckoutInfo);
+                    }
+                    checkedItems.add(bookCheckoutInfo);
                 }
             }
         } catch (Exception e) {
@@ -37,16 +93,10 @@ public class Ledger {
         } finally {
             reader.close();
         }
-        return checkedBooks;
-    }
-
-    public int getCheckedOutBooks(String libID) throws IOException {
-        getLedger(libID);
-        return currentChecked;
     }
 
     public Boolean setLedger(String libID, String bookID) throws IOException{
-        if (getCheckedOutBooks(libID) >= 5) {
+        if (getCurrentCheckedBooks().size() >= 5) {
             System.out.println("You have reached the limit. Please return a book/visual to checkout another item.\n");
             return false;
         }

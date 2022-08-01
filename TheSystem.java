@@ -101,7 +101,7 @@ public class TheSystem {
                 
             } else if (user_input == 2) {
 
-                Ledger ledger = new Ledger();
+                //Ledger ledger = new Ledger();
                 Scanner co_scanner = new Scanner(System.in).useDelimiter(" ");
                 System.out.println("Please provide your library ID to log in or press 2 to return to the main menu: ");
                 String ID_input = sc.next();
@@ -120,9 +120,11 @@ public class TheSystem {
             } else if (user_input == 4) {
 
                 System.out.println("What is your library ID? ");
-                int libID = sc.nextInt();
-                Ledger ledger = new Ledger();
-                System.out.println("Checkout history: " + ledger.getLedger(libID));
+                String libID = sc.next();
+                Ledger ledger = new Ledger(libID);
+                ledger.getLedger();
+                System.out.println("Checkout history: "+ledger.getCheckedBooks());
+                System.out.println("Books currently checked out: "+ledger.getCurrentCheckedBooks());
 
             }
 
