@@ -45,23 +45,39 @@ public class TheSystem {
     }
 // Checks out a book
 
+    // log in
+    public static Boolean logIn(String libID) throws IOException {
+        Member member = MemberPages.findMember(libID);
 
-    public static void main(String[] args) throws IOException {
+        if (member.getId().equals(libID)) {
+            ID = libID;
+            return true;
+        } else {
+            return false;
+        }
+    }
 
+    // log out
+    public static void logOut() throws IOException{
+        ID = null;
+        System.out.print("You have successfully logged out... \nReturning to main menu.");
+        mainMenu();
+    }
+
+    public static void mainMenu() throws IOException{
         Scanner sc = new Scanner(System.in);
         BookShelf list = new BookShelf();
-        BookShelf listV = new BookShelf();
-        listV.readVideoMat();
+        //BookShelf listV = new BookShelf();
+        //listV.readVideoMat();
         list.readBookList();
         MemberPages.readMemberList();
 
         //test area -----------------------------------------
 
-        Checkout.startCheckOut();
+        //Checkout.startCheckOut();
 
         //--------------------------------------------
  
-        System.out.println("Where would you like to go? ");
         int user_input;
 
         System.out.println("-------------------------------------------------");
@@ -87,16 +103,16 @@ public class TheSystem {
 
                 Ledger ledger = new Ledger();
                 Scanner co_scanner = new Scanner(System.in).useDelimiter(" ");
-                String prompt 
-                = "Enter your library ID followed by book ID(s)"
-                +"\nExample: \n1\n1 5 7";
-                System.out.println(prompt);
-                if (co_scanner.hasNextLine()) {
-                    String libID = co_scanner.nextLine();
-                    String bookIDs = co_scanner.nextLine();
-                    System.out.println("bookIDs" + bookIDs);
-                    ledger.setLedger(libID, bookIDs);
-                }
+                System.out.println("Please provide your library ID to log in or press 2 to return to the main menu: ");
+                String ID_input = sc.next();
+                do {
+                    if (logIn(ID_input)) {
+                        Checkout.startCheckOut();
+                    } else {
+                        System.out.println("\nInvalid library ID. Returning to main menu.");
+                        break;
+                    }
+                } while (!ID_input.equals("2"));
 
                 
             } else if (user_input == 3) {
@@ -111,6 +127,12 @@ public class TheSystem {
             }
 
         } while (user_input != 5);
+
+    }
+
+    public static void main(String[] args) throws IOException {
+
+        mainMenu();
     }
 
 }

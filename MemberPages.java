@@ -94,7 +94,6 @@ public class MemberPages {
     public static  Member findMember(String ID) {
         // Used to locate a Member object via ID parameter 
                int index = findMemberIndex(ID);
-        
                 return memberBook.get(index);
             }
 

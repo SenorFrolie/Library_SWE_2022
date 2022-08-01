@@ -35,19 +35,22 @@ public class Ledger {
         return checkedBooks;
     }
 
-    public void setLedger(String libID, String bookIDs) throws IOException{
+    public Boolean setLedger(String libID, String bookID) throws IOException{
         String csv = "Ledger.csv";
         CSVWriter writer = new CSVWriter(new FileWriter(csv, true),CSVWriter.DEFAULT_SEPARATOR, CSVWriter.NO_QUOTE_CHARACTER, CSVWriter.DEFAULT_ESCAPE_CHARACTER, CSVWriter.DEFAULT_LINE_END);
         try {
-            String data = libID+" "+bookIDs;
-            String[] line = data.split(" ");
-            writer.writeNext(new String[]{libID, bookIDs});
-            System.out.println("You have successfully checked out: " + bookIDs);
+            String checkoutTimestamp = ""+System.currentTimeMillis();
+            BookShelf shelf = new BookShelf();
+            String lengthDays = shelf.isBestSeller(bookID) ? "14" : "21";
+            writer.writeNext(new String[]{libID, bookID, checkoutTimestamp,"0",lengthDays,"0"});
+            System.out.println("You have successfully checked out: " + bookID);
+            return true;
         } catch (Exception e) {
-            System.out.println("Failed to checkout books: "+bookIDs);
+            System.out.println("Failed to checkout books: "+bookID);
         } finally {
             writer.close();
         }
+        return false;
         //ArrayList<String> userInfo = new ArrayList<>();
         //transactions.put(libID, userInfo);
     }
