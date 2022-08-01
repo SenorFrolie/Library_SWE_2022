@@ -204,6 +204,15 @@ public class BookShelf {
             return "not Found";
         }
 
+        public String findBookByID(String ID){
+            for(int i = 0; i < dataList.size();i++){
+                if(dataList.get(i).getRefID().equals(ID)){
+                    return dataList.get(i).getTitle();
+                }
+            }
+            return "not Found";
+        }
+
             
         public static String findVMID(String ID){
             for(int i = 0; i < dataList_VS.size();i++){
@@ -222,6 +231,15 @@ public class BookShelf {
                 if(dataList_VS.get(i).getRefID().equals(ID)){
                     return "Available";
                     //return dataList_VS.get(i).getTitle() + " " + dataList_VS.get(i).getRefID();
+                }
+            }
+            return "not Found";
+        }
+
+        public String findVMByID(String ID){
+            for(int i = 0; i < dataList_VS.size();i++){
+                if(dataList_VS.get(i).getRefID().equals(ID)){
+                    return dataList_VS.get(i).getTitle();
                 }
             }
             return "not Found";

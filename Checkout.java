@@ -116,8 +116,8 @@ public static void bookCheckOut(String bookId) throws IOException{
             //assign book to user with ledger
             //print to confirm
             //ask next action
-            Ledger ledger = new Ledger();
             String libID = TheSystem.ID;
+            Ledger ledger = new Ledger(libID);
             if (ledger.setLedger(libID, bookId)){
                 System.out.println("You have successfully checked out: " + bookId+". \nReturning to main menu.\n");
                 TheSystem.mainMenu();
