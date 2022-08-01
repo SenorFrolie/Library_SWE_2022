@@ -8,23 +8,28 @@ public class Ledger {
 
     //private static HashMap<Integer,ArrayList<String>> transactions = new HashMap<Integer,ArrayList<String>>();
     ArrayList<String> checkedBooks = new ArrayList<>();
+    int currentChecked;
 
-    public ArrayList<String> getLedger(int libID) throws IOException {
+    public ArrayList<String> getLedger(String libID) throws IOException {
         FileReader file = new FileReader("Ledger.csv");
         BufferedReader reader = new BufferedReader(file);
+        currentChecked = 0; // reset per library ID
         try {
             String line = null;
             while ((line = reader.readLine()) != null ){
                 String[] data = line.split(",");
 
+                String bookID = data[1];
+                String dateChecked = data[2];
+                String dateReturned = data[3];
+                String lengthDats = data[4];
+                String fine = data[5];
+
                 if (data[0].equals(String.valueOf(libID))) {
-                    String[] books = data[1].split(" ");
-                    BookShelf bookShelf = new BookShelf();
-                    for (String b: books) {
-                        String bookDetail = bookShelf.findID(b);
-                        checkedBooks.add(bookDetail);
+                    if (dateReturned.equals("0")) {
+                        currentChecked++;
                     }
-                    //checkedBooks.add(data[1]);
+                    checkedBooks.add(bookID);
                 }
             }
         } catch (Exception e) {
@@ -35,7 +40,16 @@ public class Ledger {
         return checkedBooks;
     }
 
+    public int getCheckedOutBooks(String libID) throws IOException {
+        getLedger(libID);
+        return currentChecked;
+    }
+
     public Boolean setLedger(String libID, String bookID) throws IOException{
+        if (getCheckedOutBooks(libID) >= 5) {
+            System.out.println("You have reached the limit. Please return a book/visual to checkout another item.\n");
+            return false;
+        }
         String csv = "Ledger.csv";
         CSVWriter writer = new CSVWriter(new FileWriter(csv, true),CSVWriter.DEFAULT_SEPARATOR, CSVWriter.NO_QUOTE_CHARACTER, CSVWriter.DEFAULT_ESCAPE_CHARACTER, CSVWriter.DEFAULT_LINE_END);
         try {
@@ -51,8 +65,6 @@ public class Ledger {
             writer.close();
         }
         return false;
-        //ArrayList<String> userInfo = new ArrayList<>();
-        //transactions.put(libID, userInfo);
     }
     public static void main(String[] args) throws IOException {
         //Ledger ledger = new Ledger();
