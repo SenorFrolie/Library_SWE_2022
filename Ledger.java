@@ -5,14 +5,17 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import com.opencsv.*;
-//import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvException;
 
 public class Ledger {
 
-    //private static HashMap<Integer,ArrayList<String>> transactions = new HashMap<Integer,ArrayList<String>>();
     private static ArrayList<ArrayList<String>> checkedItems = new ArrayList<ArrayList<String>>();
     private static ArrayList<ArrayList<String>> currentCheckedItems = new ArrayList<ArrayList<String>>();
     private static String libID;
+    private static int DATE_CHECKOUT_COLUMN = 2;
+    private static int DATE_RETURNED_COLUMN = 3;
+    private static int LENGTH_DAYS_COLUMN = 4;
+    private static int FINES_COLUMN = 6;
 
     public Ledger(String libID) {
         Ledger.libID = libID;
@@ -31,30 +34,80 @@ public class Ledger {
         return false;
     }
 
+    public boolean returnItem(String libID, String itemID) throws IOException, CsvException {
+        int row = getItemCheckoutRow(libID, itemID);
+        CSVReader reader = new CSVReader(new FileReader("Ledger.csv"));
+        List<String[]> csvBody = reader.readAll();        
+        
+        int dateReturnedTimeStamp = Integer.parseInt(csvBody.get(row)[DATE_RETURNED_COLUMN]);
+        int dateCheckoutTimeStamp = Integer.parseInt(csvBody.get(row)[DATE_CHECKOUT_COLUMN]);
+        csvBody.get(row)[DATE_RETURNED_COLUMN] = ""+System.currentTimeMillis()/1000;
+
+        int diffDays = (dateReturnedTimeStamp - dateCheckoutTimeStamp) / 86400;
+
+        int lengthDays = Integer.parseInt(csvBody.get(row)[LENGTH_DAYS_COLUMN]);
+        int daysLate = diffDays - lengthDays;
+
+        // if days late, record fine
+        if (daysLate > 0) {
+            csvBody.get(row)[FINES_COLUMN] = String.format("%.2f",daysLate * .10);
+        }
+
+        reader.close();
+
+        CSVWriter writer = new CSVWriter(new FileWriter("Ledger.csv"),CSVWriter.DEFAULT_SEPARATOR, CSVWriter.NO_QUOTE_CHARACTER, CSVWriter.DEFAULT_ESCAPE_CHARACTER, CSVWriter.DEFAULT_LINE_END);
+
+        writer.writeAll(csvBody);
+        writer.flush();
+        writer.close();
+
+        return true;
+    }
+
+    private static int getItemCheckoutRow(String libID, String itemID) throws IOException, CsvException {
+        int row = 1;
+        FileReader file = new FileReader("Ledger.csv");
+        BufferedReader reader = new BufferedReader(file);
+        try {
+            String line = null;
+            reader.readLine();//read to ignore header
+            while ((line = reader.readLine()) != null ){
+                String[] data = line.split(",");
+
+                String fileLibID = data[0];
+                String fileItemID = data[1];  
+
+                if (fileLibID.equals(libID) && fileItemID.equals(itemID)) {
+                    return row;
+                } else {
+                    row++;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("FILE ERROR: "+e);
+        } finally {
+            reader.close();
+        }
+        return 0;
+    }
     private String tsToDate(String ts) {
         if (ts.equals("")) {
             return "";
         }
-        DateFormat formatter = new SimpleDateFormat("mm/dd/yyyy");
-        Calendar calendar = Calendar.getInstance();
+        DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
         long milliSeconds = Long.parseLong(ts.trim());
-        Date date = new Date(milliSeconds);
-        calendar.setTimeInMillis(milliSeconds);
+        Date date = new Date(milliSeconds*1000);
         return formatter.format(date);
     }
 
-    private String getReturnDate(String date, int lengthDays) {
+    private String getReturnDate(String date, String lengthDays) {
         if (date.equals("")) {
             return "";
         }
-        DateFormat formatter = new SimpleDateFormat("mm/dd/yyyy");
+        DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
         Calendar calendar = Calendar.getInstance();
-        long dateCheckedMilliSeconds = Long.parseLong(date.trim());
-        int daysMilli = (int)TimeUnit.DAYS.toMillis(lengthDays);
-        //long returnDateInMilliSeconds = dateCheckedMilliSeconds + lengthDays;
-        //Date returnDate = new Date(dateCheckedMilliSeconds + days);
-        System.out.println("lengthDays: "+lengthDays);
-        System.out.println("daysMilli: "+daysMilli);
+        long dateCheckedMilliSeconds = Long.parseLong(date.trim()+"000");
+        int daysMilli = (int)TimeUnit.DAYS.toMillis(Long.parseLong(lengthDays));
         calendar.setTimeInMillis(dateCheckedMilliSeconds);
         calendar.add(Calendar.MILLISECOND, daysMilli);
         return formatter.format(calendar.getTimeInMillis());
@@ -72,8 +125,8 @@ public class Ledger {
                 String itemID = data[1];
                 String dateChecked = data[2];                
                 String dateReturned = data[3];
-                int lengthDays = Integer.parseInt(data[4].trim());
-                String fine = data[5];
+                String dueDate = data[5];
+                String fine = data[6];
 
                 if (data[0].equals(String.valueOf(libID))) {
                     BookShelf shelf = new BookShelf();
@@ -85,7 +138,7 @@ public class Ledger {
                     bookCheckoutInfo.add(itemName);
                     bookCheckoutInfo.add(tsToDate(dateChecked));
                     bookCheckoutInfo.add(tsToDate(dateReturned));
-                    bookCheckoutInfo.add(getReturnDate(dateChecked, lengthDays));
+                    bookCheckoutInfo.add(tsToDate(dueDate));
                     bookCheckoutInfo.add(fine);
                     //check for currently checked out items
                     if (dateReturned.equals("")) {
@@ -112,7 +165,7 @@ public class Ledger {
             String checkoutTimestamp = ""+System.currentTimeMillis();
             BookShelf shelf = new BookShelf();
             String lengthDays = shelf.isBestSeller(bookID) ? "14" : "21";
-            writer.writeNext(new String[]{libID, bookID, checkoutTimestamp,"0",lengthDays,"0"});
+            writer.writeNext(new String[]{libID, bookID, checkoutTimestamp,"0",lengthDays,getReturnDate(checkoutTimestamp,lengthDays),"0"});
             System.out.println("You have successfully checked out: " + bookID);
             return true;
         } catch (Exception e) {

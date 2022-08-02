@@ -64,6 +64,28 @@ public class TheSystem {
         mainMenu();
     }
 
+    private static void silverPlatterPrinter(ArrayList<ArrayList<String>> aRay, String label) {
+        String RESET = "\u001B[0m";
+        String RED = "\u001B[31m";
+        String GREEN = "\u001B[32m";
+        String CYAN = "\u001B[36m";
+        System.out.println("===================================");
+        System.out.println("\t"+CYAN+label+RESET);
+        System.out.println("===================================");
+        for(ArrayList<String> arr : aRay) {
+            String item = arr.get(0);
+            String checkoutDate = arr.get(1);
+            String dateReturned = (!arr.get(2).equals("")) ? arr.get(2) : "Currently checked out";
+            String fine = arr.get(4);
+            System.out.println("Item: "+item);
+            System.out.println(GREEN+"Checkout Date: "+RESET+checkoutDate);
+            System.out.println(RED+"Due Date: "+RESET+arr.get(3));
+            System.out.println("Date Returned: "+dateReturned);
+            System.out.println("Fine: $"+fine);
+            System.out.println("\n---------\n");
+        }
+    }
+
     public static void mainMenu() throws IOException{
         Scanner sc = new Scanner(System.in);
         BookShelf list = new BookShelf();
@@ -117,14 +139,27 @@ public class TheSystem {
                 
             } else if (user_input == 3) {
 
+                //Ledger ledger = new Ledger();
+                Scanner co_scanner = new Scanner(System.in).useDelimiter(" ");
+                System.out.println("Please provide your library ID to log in or press 2 to return to the main menu: ");
+                String ID_input = sc.next();
+                do {
+                    if (logIn(ID_input)) {
+                        ReturnItem.returnProcess();
+                    } else {
+                        System.out.println("\nInvalid library ID. Returning to main menu.");
+                        break;
+                    }
+                } while (!ID_input.equals("2"));
+
             } else if (user_input == 4) {
 
                 System.out.println("What is your library ID? ");
                 String libID = sc.next();
                 Ledger ledger = new Ledger(libID);
                 ledger.getLedger();
-                System.out.println("Checkout history: "+ledger.getCheckedItems());
-                System.out.println("Books currently checked out: "+ledger.getCurrentCheckedItems());
+                silverPlatterPrinter(ledger.getCheckedItems(), "Checkout History");
+                silverPlatterPrinter(ledger.getCurrentCheckedItems(), "Currently Checked out");
 
             }
 

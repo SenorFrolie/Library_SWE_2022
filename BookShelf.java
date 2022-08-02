@@ -203,7 +203,7 @@ public class BookShelf {
         }
 //=============================================
 
-        public String findBookByID(String ID){
+        public static String findBookByID(String ID){
             for(int i = 0; i < dataList.size();i++){
                 if(dataList.get(i).getRefID().equals(ID)){
                     return dataList.get(i).getTitle();
@@ -236,7 +236,7 @@ public class BookShelf {
         }
 //=============================================
 
-        public String findVMByID(String ID){
+        public static String findVMByID(String ID){
             for(int i = 0; i < dataList_VS.size();i++){
                 if(dataList_VS.get(i).getRefID().equals(ID)){
                     return dataList_VS.get(i).getTitle();
