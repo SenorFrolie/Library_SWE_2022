@@ -118,8 +118,14 @@ public static void bookCheckOut(String bookId) throws IOException{
             //ask next action
             String libID = TheSystem.ID;
             Ledger ledger = new Ledger(libID);
+            String bookDueDate;
             if (ledger.setLedger(libID, bookId)){
-                System.out.println("You have successfully checked out: " + bookId+". \nReturning to main menu.\n");
+                //get due date to show user when it is due...
+                //bookDueDate = ledger.tsToDate(bookId);
+
+                System.out.println("You have successfully checked out: " + BookShelf.findBookByID(bookId) + "  " + bookId);
+                System.out.println("This item is due by: " + bookDueDate);
+                System.out.println("\nReturning to main menu.\n");
                 TheSystem.mainMenu();
             }
         }
@@ -154,14 +160,29 @@ public static void visualCheckOut(String visualID) throws IOException{
             //assign visual to user with ledger
             //print to confirm
             //ask next action
+            String libID = TheSystem.ID;
+            Ledger ledger = new Ledger(libID);
+            String visualDueDate;
+            if (ledger.setLedger(libID, visualID)){
+                //get due date to show user when it is due...
+                //bookDueDate = ledger.tsToDate(bookId);
+
+                System.out.println("You have successfully checked out: " + BookShelf.findVMByID(visualID) + "  " + visualID);
+                System.out.println("This item is due by: " + visualDueDate);
+                System.out.println("\nReturning to main menu.\n");
+                TheSystem.mainMenu();
+            }
         }
         else if(user_input == 2){
             startCheckOut();
         }
-       
-        else{
+        
+        else if(user_input != 3 && user_input != 2 && user_input != 1){
             System.out.println("please choose one of the options");
         }
-}while(user_input != 3);
-}
+   
+
+    } while(user_input != 3);
+    TheSystem.logOut();
+    }
 }
