@@ -5,12 +5,17 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import com.opencsv.*;
+import com.opencsv.exceptions.CsvException;
 
 public class Ledger {
 
     private static ArrayList<ArrayList<String>> checkedItems = new ArrayList<ArrayList<String>>();
     private static ArrayList<ArrayList<String>> currentCheckedItems = new ArrayList<ArrayList<String>>();
     private static String libID;
+    private static int DATE_CHECKOUT_COLUMN = 2;
+    private static int DATE_RETURNED_COLUMN = 3;
+    private static int LENGTH_DAYS_COLUMN = 4;
+    private static int FINES_COLUMN = 6;
 
     public Ledger(String libID) {
         Ledger.libID = libID;
@@ -29,6 +34,62 @@ public class Ledger {
         return false;
     }
 
+    public boolean returnItem(String libID, String itemID) throws IOException, CsvException {
+        int row = getItemCheckoutRow(libID, itemID);
+        CSVReader reader = new CSVReader(new FileReader("Ledger.csv"));
+        List<String[]> csvBody = reader.readAll();        
+        
+        int dateReturnedTimeStamp = Integer.parseInt(csvBody.get(row)[DATE_RETURNED_COLUMN]);
+        int dateCheckoutTimeStamp = Integer.parseInt(csvBody.get(row)[DATE_CHECKOUT_COLUMN]);
+        csvBody.get(row)[DATE_RETURNED_COLUMN] = ""+System.currentTimeMillis()/1000;
+
+        int diffDays = (dateReturnedTimeStamp - dateCheckoutTimeStamp) / 86400;
+
+        int lengthDays = Integer.parseInt(csvBody.get(row)[LENGTH_DAYS_COLUMN]);
+        int daysLate = diffDays - lengthDays;
+
+        // if days late, record fine
+        if (daysLate > 0) {
+            csvBody.get(row)[FINES_COLUMN] = String.format("%.2f",daysLate * .10);
+        }
+
+        reader.close();
+
+        CSVWriter writer = new CSVWriter(new FileWriter("Ledger.csv"),CSVWriter.DEFAULT_SEPARATOR, CSVWriter.NO_QUOTE_CHARACTER, CSVWriter.DEFAULT_ESCAPE_CHARACTER, CSVWriter.DEFAULT_LINE_END);
+
+        writer.writeAll(csvBody);
+        writer.flush();
+        writer.close();
+
+        return true;
+    }
+
+    private static int getItemCheckoutRow(String libID, String itemID) throws IOException, CsvException {
+        int row = 1;
+        FileReader file = new FileReader("Ledger.csv");
+        BufferedReader reader = new BufferedReader(file);
+        try {
+            String line = null;
+            reader.readLine();//read to ignore header
+            while ((line = reader.readLine()) != null ){
+                String[] data = line.split(",");
+
+                String fileLibID = data[0];
+                String fileItemID = data[1];  
+
+                if (fileLibID.equals(libID) && fileItemID.equals(itemID)) {
+                    return row;
+                } else {
+                    row++;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("FILE ERROR: "+e);
+        } finally {
+            reader.close();
+        }
+        return 0;
+    }
     private String tsToDate(String ts) {
         if (ts.equals("")) {
             return "";
