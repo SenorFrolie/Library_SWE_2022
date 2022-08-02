@@ -47,38 +47,6 @@ public class BookShelf {
     
     // Procesing Visual.csv into objects 
     public void readVideoMat() throws IOException{
-/*
-        try {
-            String line =null;
-            FileReader frV = new FileReader("Visual.csv");
-            BufferedReader br = new BufferedReader(frV);
-            br.readLine();
-           // String stringReadV = br.readLine();
-
-            while ((line = br.readLine()) != null) {
-                String[] elementsV = line.split(",");
-
-                if (elementsV.length < 3) {
-                    throw new RuntimeException("line too short"); // handle missing entries
-                }
-
-                String Title_V = elementsV[0];
-                String Director = elementsV[1];
-                String Id_V = elementsV[2];
-
-                VisualMat temp_2 = new VisualMat(Title_V, Director, Id_V);
-
-                dataList_VS.add((VisualMat) temp_2);
-                
-                // read the next line
-                line = br.readLine();
-                }
-                br.close();
-
-        } catch (Exception e) {
-            System.out.println("ERROR: Invalid Visual read CSV file read. . .");
-        }
-        */
 
 
         FileReader fr = new FileReader("Visual.csv");
@@ -100,16 +68,13 @@ public class BookShelf {
 
                 VisualMat temp_2 = new VisualMat(Title, Director, Id);
                 dataList_VS.add((VisualMat) temp_2);
-
             }
             br.close();
-
         } catch (Exception e) {
             System.out.println("ERROR: Invalid books CSV file read. . .");
         } finally {
             br.close();
         }
-        
 }
 
 
