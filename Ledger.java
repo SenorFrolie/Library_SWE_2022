@@ -18,11 +18,17 @@ public class Ledger {
         Ledger.libID = libID;
     }
 
-    public ArrayList<ArrayList<String>> getCheckedBooks() throws IOException {
+    public ArrayList<ArrayList<String>> getCheckedItems() throws IOException {
         return checkedItems;
     }
-    public ArrayList<ArrayList<String>> getCurrentCheckedBooks() throws IOException {
+    public ArrayList<ArrayList<String>> getCurrentCheckedItems() throws IOException {
         return currentCheckedItems;
+    }
+    public boolean getCurrentCheckedItemByID(String ID) throws IOException {
+        for(ArrayList<String> arr : currentCheckedItems) {
+            return arr.indexOf(ID) > 0;
+        }
+        return false;
     }
 
     private String tsToDate(String ts) {
@@ -96,7 +102,7 @@ public class Ledger {
     }
 
     public Boolean setLedger(String libID, String bookID) throws IOException{
-        if (getCurrentCheckedBooks().size() >= 5) {
+        if (getCurrentCheckedItems().size() >= 5) {
             System.out.println("You have reached the limit. Please return a book/visual to checkout another item.\n");
             return false;
         }

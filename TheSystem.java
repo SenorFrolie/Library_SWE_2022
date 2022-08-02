@@ -123,8 +123,8 @@ public class TheSystem {
                 String libID = sc.next();
                 Ledger ledger = new Ledger(libID);
                 ledger.getLedger();
-                System.out.println("Checkout history: "+ledger.getCheckedBooks());
-                System.out.println("Books currently checked out: "+ledger.getCurrentCheckedBooks());
+                System.out.println("Checkout history: "+ledger.getCheckedItems());
+                System.out.println("Books currently checked out: "+ledger.getCurrentCheckedItems());
 
             }
 
