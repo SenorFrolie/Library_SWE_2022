@@ -5,11 +5,9 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import com.opencsv.*;
-//import com.opencsv.CSVReader;
 
 public class Ledger {
 
-    //private static HashMap<Integer,ArrayList<String>> transactions = new HashMap<Integer,ArrayList<String>>();
     private static ArrayList<ArrayList<String>> checkedItems = new ArrayList<ArrayList<String>>();
     private static ArrayList<ArrayList<String>> currentCheckedItems = new ArrayList<ArrayList<String>>();
     private static String libID;
@@ -35,26 +33,20 @@ public class Ledger {
         if (ts.equals("")) {
             return "";
         }
-        DateFormat formatter = new SimpleDateFormat("mm/dd/yyyy");
-        Calendar calendar = Calendar.getInstance();
+        DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
         long milliSeconds = Long.parseLong(ts.trim());
-        Date date = new Date(milliSeconds);
-        calendar.setTimeInMillis(milliSeconds);
+        Date date = new Date(milliSeconds*1000);
         return formatter.format(date);
     }
 
-    private String getReturnDate(String date, int lengthDays) {
+    private String getReturnDate(String date, String lengthDays) {
         if (date.equals("")) {
             return "";
         }
-        DateFormat formatter = new SimpleDateFormat("mm/dd/yyyy");
+        DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
         Calendar calendar = Calendar.getInstance();
-        long dateCheckedMilliSeconds = Long.parseLong(date.trim());
-        int daysMilli = (int)TimeUnit.DAYS.toMillis(lengthDays);
-        //long returnDateInMilliSeconds = dateCheckedMilliSeconds + lengthDays;
-        //Date returnDate = new Date(dateCheckedMilliSeconds + days);
-        System.out.println("lengthDays: "+lengthDays);
-        System.out.println("daysMilli: "+daysMilli);
+        long dateCheckedMilliSeconds = Long.parseLong(date.trim()+"000");
+        int daysMilli = (int)TimeUnit.DAYS.toMillis(Long.parseLong(lengthDays));
         calendar.setTimeInMillis(dateCheckedMilliSeconds);
         calendar.add(Calendar.MILLISECOND, daysMilli);
         return formatter.format(calendar.getTimeInMillis());
@@ -72,8 +64,8 @@ public class Ledger {
                 String itemID = data[1];
                 String dateChecked = data[2];                
                 String dateReturned = data[3];
-                int lengthDays = Integer.parseInt(data[4].trim());
-                String fine = data[5];
+                String dueDate = data[5];
+                String fine = data[6];
 
                 if (data[0].equals(String.valueOf(libID))) {
                     BookShelf shelf = new BookShelf();
@@ -85,7 +77,7 @@ public class Ledger {
                     bookCheckoutInfo.add(itemName);
                     bookCheckoutInfo.add(tsToDate(dateChecked));
                     bookCheckoutInfo.add(tsToDate(dateReturned));
-                    bookCheckoutInfo.add(getReturnDate(dateChecked, lengthDays));
+                    bookCheckoutInfo.add(tsToDate(dueDate));
                     bookCheckoutInfo.add(fine);
                     //check for currently checked out items
                     if (dateReturned.equals("")) {
@@ -112,7 +104,7 @@ public class Ledger {
             String checkoutTimestamp = ""+System.currentTimeMillis();
             BookShelf shelf = new BookShelf();
             String lengthDays = shelf.isBestSeller(bookID) ? "14" : "21";
-            writer.writeNext(new String[]{libID, bookID, checkoutTimestamp,"0",lengthDays,"0"});
+            writer.writeNext(new String[]{libID, bookID, checkoutTimestamp,"0",lengthDays,getReturnDate(checkoutTimestamp,lengthDays),"0"});
             System.out.println("You have successfully checked out: " + bookID);
             return true;
         } catch (Exception e) {
