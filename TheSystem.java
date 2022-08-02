@@ -145,7 +145,7 @@ public class TheSystem {
                 String ID_input = sc.next();
                 do {
                     if (logIn(ID_input)) {
-                        ReturnItem.returnProcess();
+                        ReturnItem.returnProcess(ID_input);
                     } else {
                         System.out.println("\nInvalid library ID. Returning to main menu.");
                         break;

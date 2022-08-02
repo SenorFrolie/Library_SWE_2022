@@ -27,7 +27,7 @@ public class Ledger {
     public ArrayList<ArrayList<String>> getCurrentCheckedItems() throws IOException {
         return currentCheckedItems;
     }
-    public boolean getCurrentCheckedItemByID(String ID) throws IOException {
+    public static boolean getCurrentCheckedItemByID(String ID) throws IOException {
         for(ArrayList<String> arr : currentCheckedItems) {
             return arr.indexOf(ID) != -1;
         }

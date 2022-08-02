@@ -35,6 +35,7 @@ public static void startCheckOut() throws IOException{
         //check if user has fees 
         //then while(fees == 0) continue checkout
         int user_input;
+        int requestChoice;
         checkforFees(TheSystem.ID);
       
 
@@ -57,8 +58,24 @@ public static void startCheckOut() throws IOException{
                     bookCheckOut(bookidNum);
                     }
                     else if(availabality != "Available"){
-                        System.out.println("Book is not available");
-                        //request option from ...
+                        
+                        do{
+                            System.out.println("Book is not available");
+                            System.out.println("1. Request Item");
+                            System.out.println("2. Search for another item");
+                
+                
+                            Scanner ac = new Scanner(System.in);
+                
+                            requestChoice = ac.nextInt();
+                
+                            if(requestChoice == 1){
+                                BookShelf.requestNewBook();
+                            }
+                            else if (requestChoice == 2){
+                                startCheckOut();
+                            }
+                        }while (requestChoice != 3);
                     }
                 }
             }
@@ -71,8 +88,23 @@ public static void startCheckOut() throws IOException{
                     visualCheckOut(visualidNum);
                     }
                     else if(availabality != "Available"){
-                        System.out.println("Visual Material is not available");
-                        //request option from ...
+                        do{
+                            System.out.println("Book is not available");
+                            System.out.println("1. Request Item");
+                            System.out.println("2. Search for another item");
+                
+                
+                            Scanner ac = new Scanner(System.in);
+                
+                            requestChoice = ac.nextInt();
+                
+                            if(requestChoice == 1){
+                                BookShelf.requestNewBook();
+                            }
+                            else if (requestChoice == 2){
+                                startCheckOut();
+                            }
+                        }while (requestChoice != 3);
                     }
                 }
             }
@@ -118,13 +150,13 @@ public static void bookCheckOut(String bookId) throws IOException{
             //ask next action
             String libID = TheSystem.ID;
             Ledger ledger = new Ledger(libID);
-            String bookDueDate;
+            //String bookDueDate;
             if (ledger.setLedger(libID, bookId)){
                 //get due date to show user when it is due...
                 //bookDueDate = ledger.tsToDate(bookId);
 
                 System.out.println("You have successfully checked out: " + BookShelf.findBookByID(bookId) + "  " + bookId);
-                System.out.println("This item is due by: " + bookDueDate);
+                //System.out.println("This item is due by: " + bookDueDate);
                 System.out.println("\nReturning to main menu.\n");
                 TheSystem.mainMenu();
             }
@@ -162,13 +194,13 @@ public static void visualCheckOut(String visualID) throws IOException{
             //ask next action
             String libID = TheSystem.ID;
             Ledger ledger = new Ledger(libID);
-            String visualDueDate;
+            //String visualDueDate;
             if (ledger.setLedger(libID, visualID)){
                 //get due date to show user when it is due...
                 //bookDueDate = ledger.tsToDate(bookId);
 
                 System.out.println("You have successfully checked out: " + BookShelf.findVMByID(visualID) + "  " + visualID);
-                System.out.println("This item is due by: " + visualDueDate);
+                //System.out.println("This item is due by: " + visualDueDate);
                 System.out.println("\nReturning to main menu.\n");
                 TheSystem.mainMenu();
             }

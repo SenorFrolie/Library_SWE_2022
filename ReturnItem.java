@@ -11,14 +11,16 @@ import com.opencsv.exceptions.CsvException;
 
 
 public class ReturnItem{
-    public void returnProcess(){
+    public static void returnProcess(String ID){
         //Display user items/ due dates/ fees etc (from ledger)
         int user_input;
+        int itemReturning;
         
         do{
-            System.out.println("\nWould you like to return or renew an item?");
-            System.out.println("1. Return");
-            System.out.println("2. Renew");
+            System.out.println("\nWould you like to return a book or visual material?");
+            System.out.println("1. Book");
+            System.out.println("2. Visual Material");
+            System.out.println("3. Logout");
 
 
             Scanner sc = new Scanner(System.in);
@@ -26,33 +28,50 @@ public class ReturnItem{
             user_input = sc.nextInt();
 
             if(user_input == 1){
-                System.out.println("Please enter item ID");
-                Scanner itemIdInput = new Scanner(System.in);
-
-                String itemidNum = itemIdInput.nextLine();
-                //look for item in ledger since it should be with user
-                //basically need to do this with ledger to see if user has book
-                
-                Boolean availabality = Ledger.getCurrentCheckedItemByID(itemidNum);
-                if(availabality == true){
-                bookReturn(itemidNum);
-                }
-                else if(availabality == false){
-                    System.out.println("Item not found");
-                    //request option from ...
-                }
+                do{
+                    System.out.println("\nWould you like to return or renew item?");
+                    System.out.println("1. Return");
+                    System.out.println("2. Renew");
+        
+        
+                    Scanner ac = new Scanner(System.in);
+        
+                    itemReturning = ac.nextInt();
+        
+                    if(itemReturning == 1){
+                        itemReturn(ID);
+                    }
+                    else if(itemReturning == 2){
+                        //renew item from ledger
+                    }
+                }while(itemReturning != 3);
             }
-            if(user_input == 2){
-                //renew item from ledger
-                }
-            
+            else if (user_input == 2){
+                do{
+                    System.out.println("\nWould you like to return or renew item?");
+                    System.out.println("1. Return");
+                    System.out.println("2. Renew");
+        
+        
+                    Scanner ac = new Scanner(System.in);
+        
+                    itemReturning = ac.nextInt();
+        
+                    if(itemReturning == 1){
+                       visualReturn();
+                    }
+                    else if(itemReturning == 2){
+                        //renew item from ledger
+                    }
+                }while(itemReturning != 3);
+            }
         
         } while (user_input != 3);
         
 
     }
 
-}
+
 
 
 //item return function
@@ -60,41 +79,68 @@ public class ReturnItem{
 //calculate fees (ledger)
 //shows reciept to user to show its been returned and fees if applicable (ledger)
 
-public static void bookReturn(String bookId) throws IOException{
+public static void itemReturn(String ID) throws IOException{
+
+    Scanner sc = new Scanner(System.in);
+
+    String userID = ID;
+    
+    //Check if available
+    bookAvailabality();
+
+    int user_input = Integer.parseInt(bookAvailabality());
+    System.out.println(user_input);
+    int bookfees;
+    //return book to list
+    //Write back to book list function
+    System.out.println("Book has been returned. Outstanding Fees: " + bookfees);
+    
+    TheSystem.logOut();
+}
+
+public static String bookAvailabality() throws IOException{
 
     Scanner sc = new Scanner(System.in);
     
     //Check if available
-    int user_input;
+    String user_input;
+    int requestChoice;
+
     do{
-        System.out.println("\nWould you like to checkout: " + bookId);
-        System.out.println("1. Checkout");
-        System.out.println("2. Look for different option (back)");
-        System.out.println("3. Log Out");
-        user_input = sc.nextInt();
+        System.out.println("Please enter item ID");
+        
+        
+        user_input = sc.nextLine();
 
-        
-        
-        if(user_input == 1){
-            //assign book to user with ledger
-            //print to confirm
-            //ask next action
-            String libID = TheSystem.ID;
-            Ledger ledger = new Ledger(libID);
-            if (ledger.setLedger(libID, bookId)){
-                System.out.println("You have successfully checked out: " + bookId+". \nReturning to main menu.\n");
-                TheSystem.mainMenu();
-            }
+        Boolean availabality = Ledger.getCurrentCheckedItemByID(user_input);
+        if(availabality == true){
+            return user_input;
         }
-        else if(user_input == 2){
-            startCheckOut();
-        }
-        
-        else if(user_input != 3 && user_input != 2 && user_input != 1){
-            System.out.println("please choose one of the options");
-        }
-   
+        else if(availabality == false){
+            do{
+                System.out.println("Item not found");
+                System.out.println("1. Search for another book");
+                System.out.println("2. Logout");
+    
+    
+                Scanner ac = new Scanner(System.in);
+    
+                requestChoice = ac.nextInt();
+    
+                if(requestChoice == 1){
+                    bookAvailabality();
+                }
+                else if (requestChoice == 2){
+                    TheSystem.logOut();
+                }
+            }while (requestChoice != 3);
+            
+            
+        }        
+    }while(user_input != null);
+    return null;
+}
 
-    } while(user_input != 3);
-    TheSystem.logOut();
+
+
 }
