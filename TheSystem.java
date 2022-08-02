@@ -139,6 +139,19 @@ public class TheSystem {
                 
             } else if (user_input == 3) {
 
+                //Ledger ledger = new Ledger();
+                Scanner co_scanner = new Scanner(System.in).useDelimiter(" ");
+                System.out.println("Please provide your library ID to log in or press 2 to return to the main menu: ");
+                String ID_input = sc.next();
+                do {
+                    if (logIn(ID_input)) {
+                        ReturnItem.returnProcess();
+                    } else {
+                        System.out.println("\nInvalid library ID. Returning to main menu.");
+                        break;
+                    }
+                } while (!ID_input.equals("2"));
+
             } else if (user_input == 4) {
 
                 System.out.println("What is your library ID? ");
