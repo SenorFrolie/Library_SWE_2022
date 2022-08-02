@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.Scanner;
 import com.opencsv.*;
 import com.opencsv.exceptions.CsvException;
@@ -100,9 +101,16 @@ public class BookShelf {
                 System.out.println("--------------------------------------");
                 System.out.println("|           book section              |");
                 System.out.println("--------------------------------------"); 
+                System.out.println();
+                System.out.printf("%-25s %10s %n", "Title", "Author");
+                System.out.println("-------------          --------------");
 
                 for(Books book:dataList){
-                    System.out.println(book.getTitle() + " by " + book.getAuthor());
+                    Formatter f = new Formatter();
+                    f = new Formatter();
+                    String head1 = book.getTitle();
+                    String head2 = book.getAuthor();
+                    System.out.printf("%-25s %10s %n", head1, head2);
                 }
                 //FilterBooks();
                 //This is where checkouts goes
@@ -112,9 +120,15 @@ public class BookShelf {
                 System.out.println("--------------------------------------");
                 System.out.println("|       Visual Audio section         | ");
                 System.out.println("--------------------------------------");
+                System.out.println();
+                System.out.printf("%-25s %10s %n", "Title", "Director");
+                System.out.println("-------------          --------------");
                 for(VisualMat book :dataList_VS){
-                    System.out.println(book.getTitle() + " by " + book.getDirector());
-                }
+                    Formatter f = new Formatter();
+                    f = new Formatter();
+                    String head1 = book.getTitle();
+                    String head2 = book.getDirector();
+                    System.out.printf("%-25s %10s %n", head1, head2);                }
  
             }
             else if(user_input == 3){
