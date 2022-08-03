@@ -232,6 +232,11 @@ public class BookShelf {
                     return dataList.get(i).getValue();
                 }
             }
+            for(int i = 0; i < dataList_VS.size();i++){
+                if(dataList_VS.get(i).getRefID().equals(ID)){
+                    return "15";
+                }
+            }
             return "not Found";
         }
 
