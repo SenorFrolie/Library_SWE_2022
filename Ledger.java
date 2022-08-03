@@ -40,7 +40,7 @@ public class Ledger {
         for(ArrayList<String> arr : checkedItems) {
             return arr.get(4);
         }
-        return null;
+        return "0";
     }
 
     public boolean returnItem(String libID, String itemID) throws IOException, CsvException {
