@@ -52,27 +52,28 @@ public class BookShelf {
 
         FileReader fr = new FileReader("Visual.csv");
         BufferedReader br = new BufferedReader(fr);
-        // Processing Books.CSV into objects 
+        // Processing Visual.CSV into objects 
         try {
             br.readLine(); // read first line to avoid displaying file header
             String line = null;
             while ((line = br.readLine()) != null) {
                 String[] elements = line.split(",");
-
-                if (elements.length < 3) {
+                if (elements.length < 4) {
                     throw new RuntimeException("line too short"); // handle missing entries
                 }
                 
                 String Title = elements[0];
                 String Director = elements[1];
                 String Id = elements[2];
+                String Value = elements[3];
 
-                VisualMat temp_2 = new VisualMat(Title, Director, Id);
+
+                VisualMat temp_2 = new VisualMat(Title, Director, Id,Value);
                 dataList_VS.add((VisualMat) temp_2);
             }
             br.close();
         } catch (Exception e) {
-            System.out.println("ERROR: Invalid books CSV file read. . .");
+            System.out.println("ERROR: Invalid Visual CSV file read. . .");
         } finally {
             br.close();
         }
@@ -112,8 +113,6 @@ public class BookShelf {
                     String head2 = book.getAuthor();
                     System.out.printf("%-25s %10s %n", head1, head2);
                 }
-                //FilterBooks();
-                //This is where checkouts goes
              
             }
             else if(user_input == 2){
@@ -123,22 +122,21 @@ public class BookShelf {
                 System.out.println();
                 System.out.printf("%-25s %10s %n", "Title", "Director");
                 System.out.println("-------------          --------------");
-                for(VisualMat book :dataList_VS){
-                    Formatter f = new Formatter();
-                    f = new Formatter();
-                    String head1 = book.getTitle();
-                    String head2 = book.getDirector();
-                    System.out.printf("%-25s %10s %n", head1, head2);                }
+                for(VisualMat visual :dataList_VS){
+                    //Formatter f = new Formatter();
+                    //f = new Formatter();
+                    String head1 = visual.getTitle();
+                    String head2 = visual.getDirector();
+                    System.out.printf("%-25s %10s %n", head1, head2);                
+                }
  
             }
             else if(user_input == 3){
                 requestNewBook();
-                TheSystem.mainMenu();
             }
             else if(user_input == 4){
-                TheSystem.mainMenu();
+                return;
             }
-            //sc.close();
     }
 
     
@@ -205,12 +203,14 @@ public class BookShelf {
                    String part1 = parts[0];
                    System.out.println(part1);
 
-                   if(part1.equals("RM"))
+                   if(part1.equals("RM")){
                    return "Can't checkout reference material";   
+                   }
+                   else if(part1.equals("MG"))
+                    return "Can't checkout magazine material";
                }
                 if(dataList.get(i).getRefID().equals(ID)){
                     return "Available";
-                    //return dataList.get(i).getTitle() + " " + dataList.get(i).getRefID();
                 }
             }
             return "not Found";
@@ -240,37 +240,36 @@ public class BookShelf {
             return "not Found";
         }
 
-            
+
         public static String findVMID(String ID){
             for(int i = 0; i < dataList_VS.size();i++){
                if(dataList_VS.get(i).getRefID().equals(ID)){
                    String part = dataList_VS.get(i).getRefID();
-                  // System.out.println(part);
                    String []parts = part.split("\\.");
                    String part1 = parts[0];
                    System.out.println(part1);
 
                    if(part1.equals("RM"))
-                   return "Can't checkout reference material";
-                   
+                   return "Can't checkout reference material";         
                }
-
                 if(dataList_VS.get(i).getRefID().equals(ID)){
                     return "Available";
-                    //return dataList_VS.get(i).getTitle() + " " + dataList_VS.get(i).getRefID();
                 }
             }
             return "not Found";
         }
+        
 //=============================================
 
         public static String findVMByID(String ID){
             for(int i = 0; i < dataList_VS.size();i++){
                 if(dataList_VS.get(i).getRefID().equals(ID)){
+                    //System.out.print(dataList_VS.get(i).getTitle());
                     return dataList_VS.get(i).getTitle();
                 }
             }
-            return "not Found";
+            
+            return "Not found";
         }
 //=============================================
               
@@ -299,7 +298,6 @@ public class BookShelf {
                     String new_Quant_value = Integer.toString(j);
                     editQuantity(new_Quant_value, dataList.get(i).getRefID());
                     
-                   // updateCSV("Books.csv", new_Quant_value, old_Quant_value ,BookTitle);
 
                     return BookTitle;
                 }
@@ -313,7 +311,6 @@ public class BookShelf {
         public boolean isBestSeller(String ID){
 
             for(int i = 0; i < dataList.size();i++){
-                //System.out.println(dataList.get(i).getTitle());
                if( dataList.get(i).getRefID().equals(ID) && dataList.get(i).getBOTY().equals("Y")){
                    return true;
                }
@@ -336,7 +333,6 @@ public class BookShelf {
                 Scanner scan = new Scanner(System.in);
                 String booksrc = "requestMaterial.csv";
                 System.out.println("Please enter the necessary infomation. ");
-                //System.out.println("For example: Title, Author ");
                 System.out.print("Title: ");
                 String Title = scan.nextLine();
                 System.out.print("Author: ");
@@ -351,7 +347,6 @@ public class BookShelf {
                
                 String [] record = requested.split(",");
                 writer.writeNext(record);
-                scan.close();
                 writer.close();
             }
             else{
@@ -366,7 +361,7 @@ public class BookShelf {
                 String Director = scan.nextLine();
 
 
-                String requested = Title + ", " + Director + " (requested)" ;
+                String requested = Title + ", " +  " Directed By " + Director + " (requested)" ;
 
                 CSVWriter writer = new CSVWriter(new FileWriter(Visualsrc, true), ',',
                                                             CSVWriter.NO_QUOTE_CHARACTER,
@@ -375,8 +370,6 @@ public class BookShelf {
                 String [] record = requested.split(",");
                 writer.writeNext(record);
                 writer.close();
-                sc.close();
-                scan.close();
             }
         }
 
@@ -427,6 +420,8 @@ public static void main(String[] args) throws IOException, CsvException {
     BookShelf green = new BookShelf();
 
     green.readBookList();
+    green.readVideoMat();
+
     //Test for sending a book if we have it in Books.csv
     System.out.println(green.SendBook("Harry potter"));
 
@@ -438,6 +433,8 @@ public static void main(String[] args) throws IOException, CsvException {
 
     //Tests to see if it returns the price of te book
     System.out.println(green.BooksPrice("10"));
+    System.out.println(BookShelf.findVMByID("VM.10"));
+    System.out.println(BookShelf.findVMID("VM.10"));
 
     }
 
