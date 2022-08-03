@@ -226,6 +226,15 @@ public class BookShelf {
             return "not Found";
         }
 
+        public static String findValueByID(String ID){
+            for(int i = 0; i < dataList.size();i++){
+                if(dataList.get(i).getRefID().equals(ID)){
+                    return dataList.get(i).getValue();
+                }
+            }
+            return "not Found";
+        }
+
             
         public static String findVMID(String ID){
             for(int i = 0; i < dataList_VS.size();i++){

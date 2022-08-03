@@ -59,7 +59,12 @@ public class Ledger {
 
         // if days late, record fine
         if (daysLate > 0) {
-            csvBody.get(row)[FINES_COLUMN] = String.format("%.2f",daysLate * .10);
+            double fee = daysLate * .10;
+            int bookValue = Integer.parseInt(BookShelf.findValueByID(itemID));
+            if (fee > bookValue) {
+                fee = bookValue;
+            }
+            csvBody.get(row)[FINES_COLUMN] = String.format("%.2f",fee);
         }
 
         reader.close();
