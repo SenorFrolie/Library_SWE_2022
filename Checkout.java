@@ -12,11 +12,15 @@ import com.opencsv.exceptions.CsvException;
 
 public class Checkout{
 //verify user fees
-public static boolean checkforFees(String ID){
+public static boolean checkforFees(String ID) throws IOException{
+
+    String libID = TheSystem.ID;
+    Ledger ledger = new Ledger(libID);
 
     String userFees = MemberPages.findMember(TheSystem.ID).getFineTotal();
+    String userOverDueFees = ledger.getCurrentFinesForUser(TheSystem.ID);
 
-    if (userFees.equals("0")){
+    if (userFees.equals("0") || userOverDueFees.equals("0")){
         return false;
     }
     else{
@@ -25,15 +29,11 @@ public static boolean checkforFees(String ID){
         return true;
     }
 
-
 }
 
 
-    // would you like to checkout book or visual material?
 public static void startCheckOut() throws IOException, CsvException{
         
-        //check if user has fees 
-        //then while(fees == 0) continue checkout
         int user_input;
         int requestChoice;
         checkforFees(TheSystem.ID);
@@ -63,8 +63,7 @@ public static void startCheckOut() throws IOException, CsvException{
                             System.out.println("Book is not available");
                             System.out.println("1. Request Item");
                             System.out.println("2. Search for another item");
-                
-                
+
                             Scanner ac = new Scanner(System.in);
                 
                             requestChoice = ac.nextInt();
@@ -93,7 +92,6 @@ public static void startCheckOut() throws IOException, CsvException{
                             System.out.println("1. Request Item");
                             System.out.println("2. Search for another item");
                 
-                
                             Scanner ac = new Scanner(System.in);
                 
                             requestChoice = ac.nextInt();
@@ -109,8 +107,7 @@ public static void startCheckOut() throws IOException, CsvException{
                 }
             }
         }while (user_input != 3);
-        
-
+    
     }
 
 
@@ -118,8 +115,7 @@ public static void startCheckOut() throws IOException, CsvException{
 public static void bookCheckOut(String bookId) throws IOException, CsvException{
 
     Scanner sc = new Scanner(System.in);
-    
-    //Check if available
+
     int user_input;
     do{
         System.out.println("\nWould you like to checkout: " + bookId);
@@ -129,20 +125,13 @@ public static void bookCheckOut(String bookId) throws IOException, CsvException{
         user_input = sc.nextInt();
 
         
-        
         if(user_input == 1){
             //assign book to user with ledger
             //print to confirm
             //ask next action
             String libID = TheSystem.ID;
             Ledger ledger = new Ledger(libID);
-            //String bookDueDate;
             if (ledger.setLedger(libID, bookId)){
-                //get due date to show user when it is due...
-                //bookDueDate = ledger.tsToDate(bookId);
-
-                System.out.println("You have successfully checked out: " + BookShelf.findBookByID(bookId) + "  " + bookId);
-                //System.out.println("This item is due by: " + bookDueDate);
                 System.out.println("\nReturning to main menu.\n");
                 TheSystem.mainMenu();
             }
@@ -164,7 +153,6 @@ public static void visualCheckOut(String visualID) throws IOException, CsvExcept
 
     Scanner sc = new Scanner(System.in);
     
-    //Check if available
     int user_input;
     do{
         System.out.println("\nWould you like to checkout: " + visualID);
@@ -180,13 +168,8 @@ public static void visualCheckOut(String visualID) throws IOException, CsvExcept
             //ask next action
             String libID = TheSystem.ID;
             Ledger ledger = new Ledger(libID);
-            //String visualDueDate;
             if (ledger.setLedger(libID, visualID)){
-                //get due date to show user when it is due...
-                //bookDueDate = ledger.tsToDate(bookId);
 
-                System.out.println("You have successfully checked out: " + BookShelf.findVMByID(visualID) + "  " + visualID);
-                //System.out.println("This item is due by: " + visualDueDate);
                 System.out.println("\nReturning to main menu.\n");
                 TheSystem.mainMenu();
             }

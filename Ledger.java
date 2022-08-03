@@ -36,6 +36,13 @@ public class Ledger {
         return false;
     }
 
+    public String getCurrentFinesForUser(String ID) throws IOException {
+        for(ArrayList<String> arr : checkedItems) {
+            return arr.get(4);
+        }
+        return null;
+    }
+
     public boolean returnItem(String libID, String itemID) throws IOException, CsvException {
         int row = getItemCheckoutRow(libID, itemID, false);
         CSVReader reader = new CSVReader(new FileReader("Ledger.csv"));
@@ -174,14 +181,15 @@ public class Ledger {
             String lengthDays = shelf.isBestSeller(itemID) ? "14" : "21";
             if (getItemCheckoutRow(libID, itemID, true) < 2) {
                 writer.writeNext(new String[]{libID, itemID, checkoutTimestamp,"0",lengthDays,getReturnDate(checkoutTimestamp,lengthDays),"0"});
-                System.out.println("You have successfully checked out: " + itemID);
+                System.out.println("You have successfully checked out: " + itemID + "  " + BookShelf.findBookByID(itemID));
+                System.out.println("This item is due by " + tsToDate(getReturnDate(checkoutTimestamp,lengthDays)));
                 return true;
             } else {
-                System.out.println("You have checked out this item twice. You must return it.");
+                System.out.println("You have checked out this item twice. You must return it by:\n" + tsToDate(getReturnDate(checkoutTimestamp,lengthDays)));
                 return false;
             }
         } catch (Exception e) {
-            System.out.println("Failed to checkout books: "+itemID);
+            System.out.println("Failed to checkout book: "+itemID);
         } finally {
             writer.close();
         }

@@ -18,6 +18,8 @@ public class ReturnItem{
         //Display user items/ due dates/ fees etc (from ledger)
         int user_input;
         int itemReturning;
+        Ledger ledger = new Ledger(TheSystem.ID);
+        ledger.getLedger();
         
         do{
             System.out.println("\nWould you like to return a book or visual material?");
@@ -45,7 +47,7 @@ public class ReturnItem{
                         itemReturn(ID, user_input);
                     }
                     else if(itemReturning == 2){
-                        //renew item from ledger
+                        renewItem(ID, user_input);
                     }
                 }while(itemReturning != 3);
             }
@@ -92,75 +94,31 @@ public static void itemReturn(String ID, int type) throws IOException, CsvExcept
     
     System.out.println("Please enter item ID");
     user_input = sc.nextLine();
-    
-    
-    System.out.println(ledger.returnItem(ID, user_input));
-    /* 
-    Scanner sc = new Scanner(System.in);
+    String nameOfItem = BookShelf.findBookByID(user_input);
 
-    String userID = ID;
-    int itemType = type;
-
-    if(itemType == 1){
-        String idOfBook = availabality();
-
-        String nameOfBook = BookShelf.findBookByID(idOfBook);
-        //int bookfees;
-        //return book to list
-        //Write back to book list function
-        String bookSrc = "returnedMaterial.csv";
-
-
-        String requested = "User: " + userID + ",  has returned: " + nameOfBook;
-        CSVWriter writer = new CSVWriter(new FileWriter(bookSrc, true), ',',
-                                     CSVWriter.NO_QUOTE_CHARACTER,
-                                     CSVWriter.DEFAULT_ESCAPE_CHARACTER,
-                                     CSVWriter.DEFAULT_LINE_END);
-       
-        String [] record = requested.split(",");
-        writer.writeNext(record);
-        writer.close();
-        //sc.close();
-
-        //Reciept for user to see
-        System.out.println("The book: " + nameOfBook);
-        System.out.println("Has been returned. Fees: ");
+    System.out.println("The item: " + nameOfItem);
+    System.out.println("Has been returned. Fees: " + ledger.getCurrentFinesForUser(TheSystem.ID));
         
-        TheSystem.logOut();
-        
-    }
-    else if(itemType == 2){
-        String idOfVisual = availabality();
-
-        String nameOfVisual = BookShelf.findVMByID(idOfVisual);
-        //int visualFees;
-        //return book to list
-        //Write back to book list function
-        String visualSrc = "returnedMaterial.csv";
-
-
-        String requested = "User: " + userID + ",  has returned: " + nameOfVisual;
-        CSVWriter writer = new CSVWriter(new FileWriter(visualSrc, true), ',',
-                                     CSVWriter.NO_QUOTE_CHARACTER,
-                                     CSVWriter.DEFAULT_ESCAPE_CHARACTER,
-                                     CSVWriter.DEFAULT_LINE_END);
-       
-        String [] record = requested.split(",");
-        writer.writeNext(record);
-        writer.close();
-        //sc.close();
-
-
-*/
-        System.out.println("The item: ");
-        System.out.println("Has been returned. Fees: ");
-        
-        TheSystem.logOut();
+    TheSystem.logOut();
         
     }
 
+    public static void renewItem(String ID, int type) throws IOException, CsvException{
 
-
+        Ledger ledger = new Ledger(TheSystem.ID);
+        ledger.getLedger();
+    
+        Scanner sc = new Scanner(System.in);
+        String user_input;
+        
+        System.out.println("Please enter item ID");
+        user_input = sc.nextLine();
+        ledger.setLedger(TheSystem.ID, user_input);
+            
+        TheSystem.logOut();
+            
+        }
+/* 
 public static String availabality() throws IOException, CsvException{
 
     Scanner sc = new Scanner(System.in);
@@ -181,9 +139,6 @@ public static String availabality() throws IOException, CsvException{
         
         System.out.println(ledger.getCurrentCheckedItems());
 
-        //System.out.println(Ledger.getCurrentCheckedItemByID(user_input));
-
-        
         
         Boolean availabality = Ledger.getCurrentCheckedItemByID(user_input);
         if(availabality == true){
@@ -213,6 +168,6 @@ public static String availabality() throws IOException, CsvException{
     }while(user_input != null);
     return null;
 }
-
+*/
 
 }
