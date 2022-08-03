@@ -131,7 +131,7 @@ public static void bookCheckOut(String bookId) throws IOException, CsvException{
             //ask next action
             String libID = TheSystem.ID;
             Ledger ledger = new Ledger(libID);
-            if (ledger.setLedger(libID, bookId)){
+            if (ledger.setLedger(libID, bookId, 0)){
                 System.out.println("\nReturning to main menu.\n");
                 TheSystem.mainMenu();
             }
@@ -168,7 +168,7 @@ public static void visualCheckOut(String visualID) throws IOException, CsvExcept
             //ask next action
             String libID = TheSystem.ID;
             Ledger ledger = new Ledger(libID);
-            if (ledger.setLedger(libID, visualID)){
+            if (ledger.setLedger(libID, visualID, 1)){
 
                 System.out.println("\nReturning to main menu.\n");
                 TheSystem.mainMenu();

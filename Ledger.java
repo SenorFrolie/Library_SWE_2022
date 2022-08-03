@@ -168,7 +168,7 @@ public class Ledger {
         }
     }
 
-    public Boolean setLedger(String libID, String itemID) throws IOException{
+    public Boolean setLedger(String libID, String itemID, int itemType) throws IOException{
         if (getCurrentCheckedItems().size() >= 5) {
             System.out.println("You have reached the limit. Please return a book/visual to checkout another item.\n");
             return false;
@@ -179,16 +179,33 @@ public class Ledger {
             String checkoutTimestamp = ""+System.currentTimeMillis();
             BookShelf shelf = new BookShelf();
             String lengthDays = shelf.isBestSeller(itemID) ? "14" : "21";
-            if (getItemCheckoutRow(libID, itemID, true) < 2) {
+            if(itemType == 1){
+                if (getItemCheckoutRow(libID, itemID, true) < 2) {
+                    writer.writeNext(new String[]{libID, itemID, checkoutTimestamp,"0",lengthDays,getReturnDate(checkoutTimestamp,lengthDays),"0"});
+                    System.out.println("You have successfully checked out: " + itemID + "  " + BookShelf.findBookByID(itemID));
+                    System.out.println("This item is due by " + tsToDate(getReturnDate(checkoutTimestamp,lengthDays)));
+                    return true;
+                }
+                else {
+                    System.out.println("You have checked out this item twice. You must return it by:\n" 
+                                        + tsToDate(getReturnDate(checkoutTimestamp,lengthDays)));
+                    return false;
+                }
+            }
+            else if(itemType == 2){ 
+                if(getItemCheckoutRow(libID, itemID, true) < 2) {
                 writer.writeNext(new String[]{libID, itemID, checkoutTimestamp,"0",lengthDays,getReturnDate(checkoutTimestamp,lengthDays),"0"});
-                System.out.println("You have successfully checked out: " + itemID + "  " + BookShelf.findBookByID(itemID));
+                System.out.println("You have successfully checked out: " + itemID + "  " + BookShelf.findVMByID(itemID));
                 System.out.println("This item is due by " + tsToDate(getReturnDate(checkoutTimestamp,lengthDays)));
                 return true;
-            } else {
-                System.out.println("You have checked out this item twice. You must return it by:\n" 
-                                    + tsToDate(getReturnDate(checkoutTimestamp,lengthDays)));
-                return false;
+                }
+                else {
+                    System.out.println("You have checked out this item twice. You must return it by:\n" 
+                                        + tsToDate(getReturnDate(checkoutTimestamp,lengthDays)));
+                    return false;
+                }
             }
+            
         } catch (Exception e) {
             System.out.println("Failed to checkout book: "+itemID);
         } finally {
