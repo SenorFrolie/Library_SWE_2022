@@ -174,7 +174,7 @@ public class Ledger {
     }
 
     public Boolean setLedger(String libID, String itemID, int itemType) throws IOException{
-        if (getCurrentCheckedItems().size() >= 5) {
+        if (getCurrentCheckedItems().size() >= 5 && MemberPages.isChild(libID) == true) {
             System.out.println("You have reached the limit. Please return a book/visual to checkout another item.\n");
             return false;
         }
