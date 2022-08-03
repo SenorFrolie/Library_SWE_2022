@@ -39,7 +39,7 @@ public class ReturnItem{
                     itemReturning = ac.nextInt();
         
                     if(itemReturning == 1){
-                        itemReturn(ID);
+                        itemReturn(ID, user_input);
                     }
                     else if(itemReturning == 2){
                         //renew item from ledger
@@ -58,7 +58,7 @@ public class ReturnItem{
                     itemReturning = ac.nextInt();
         
                     if(itemReturning == 1){
-                       visualReturn();
+                       itemReturn(ID, user_input);
                     }
                     else if(itemReturning == 2){
                         //renew item from ledger
@@ -79,26 +79,74 @@ public class ReturnItem{
 //calculate fees (ledger)
 //shows reciept to user to show its been returned and fees if applicable (ledger)
 
-public static void itemReturn(String ID) throws IOException{
+public static void itemReturn(String ID, int type) throws IOException{
 
     Scanner sc = new Scanner(System.in);
 
     String userID = ID;
-    
-    //Check if available
-    bookAvailabality();
+    int itemType = type;
 
-    int user_input = Integer.parseInt(bookAvailabality());
-    System.out.println(user_input);
-    int bookfees;
-    //return book to list
-    //Write back to book list function
-    System.out.println("Book has been returned. Outstanding Fees: " + bookfees);
-    
-    TheSystem.logOut();
+    if(itemType == 1){
+        String idOfBook = availabality();
+
+        String nameOfBook = BookShelf.findBookByID(idOfBook);
+        int bookfees;
+        //return book to list
+        //Write back to book list function
+        String bookSrc = "returnedMaterial.csv";
+
+
+        String requested = "User: " + userID + ",  has returned: " + nameOfBook;
+        CSVWriter writer = new CSVWriter(new FileWriter(bookSrc, true), ',',
+                                     CSVWriter.NO_QUOTE_CHARACTER,
+                                     CSVWriter.DEFAULT_ESCAPE_CHARACTER,
+                                     CSVWriter.DEFAULT_LINE_END);
+       
+        String [] record = requested.split(",");
+        writer.writeNext(record);
+        writer.close();
+        //sc.close();
+
+        //Reciept for user to see
+        System.out.println("The book: " + nameOfBook);
+        System.out.println("Has been returned. Fees: " + bookfees);
+        
+        TheSystem.logOut();
+        
+    }
+    else if(itemType == 2){
+        String idOfVisual = availabality();
+
+        String nameOfVisual = BookShelf.findVMByID(idOfVisual);
+        int visualFees;
+        //return book to list
+        //Write back to book list function
+        String visualSrc = "returnedMaterial.csv";
+
+
+        String requested = "User: " + userID + ",  has returned: " + nameOfVisual;
+        CSVWriter writer = new CSVWriter(new FileWriter(visualSrc, true), ',',
+                                     CSVWriter.NO_QUOTE_CHARACTER,
+                                     CSVWriter.DEFAULT_ESCAPE_CHARACTER,
+                                     CSVWriter.DEFAULT_LINE_END);
+       
+        String [] record = requested.split(",");
+        writer.writeNext(record);
+        writer.close();
+        //sc.close();
+
+
+
+        System.out.println("The item: " + nameOfVisual);
+        System.out.println("Has been returned. Fees: " + visualFees);
+        
+        TheSystem.logOut();
+        
+    }
+
 }
 
-public static String bookAvailabality() throws IOException{
+public static String availabality() throws IOException{
 
     Scanner sc = new Scanner(System.in);
     
@@ -109,8 +157,8 @@ public static String bookAvailabality() throws IOException{
     do{
         System.out.println("Please enter item ID");
         
-        
         user_input = sc.nextLine();
+
 
         Boolean availabality = Ledger.getCurrentCheckedItemByID(user_input);
         if(availabality == true){
@@ -119,7 +167,7 @@ public static String bookAvailabality() throws IOException{
         else if(availabality == false){
             do{
                 System.out.println("Item not found");
-                System.out.println("1. Search for another book");
+                System.out.println("1. Search for another item");
                 System.out.println("2. Logout");
     
     
@@ -128,7 +176,7 @@ public static String bookAvailabality() throws IOException{
                 requestChoice = ac.nextInt();
     
                 if(requestChoice == 1){
-                    bookAvailabality();
+                    availabality();
                 }
                 else if (requestChoice == 2){
                     TheSystem.logOut();
