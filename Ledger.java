@@ -104,13 +104,12 @@ public class Ledger {
         if (date.equals("")) {
             return "";
         }
-        DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
         Calendar calendar = Calendar.getInstance();
-        long dateCheckedMilliSeconds = Long.parseLong(date.trim()+"000");
+        long dateCheckedSeconds = Long.parseLong(date.trim());
         int daysMilli = (int)TimeUnit.DAYS.toMillis(Long.parseLong(lengthDays));
-        calendar.setTimeInMillis(dateCheckedMilliSeconds);
+        calendar.setTimeInMillis(dateCheckedSeconds);
         calendar.add(Calendar.MILLISECOND, daysMilli);
-        return formatter.format(calendar.getTimeInMillis());
+        return ""+calendar.getTimeInMillis();
     }
 
     public void getLedger() throws IOException {
@@ -165,7 +164,7 @@ public class Ledger {
             String checkoutTimestamp = ""+System.currentTimeMillis();
             BookShelf shelf = new BookShelf();
             String lengthDays = shelf.isBestSeller(bookID) ? "14" : "21";
-            writer.writeNext(new String[]{libID, bookID, checkoutTimestamp,"0",lengthDays,getReturnDate(checkoutTimestamp,lengthDays),"0"});
+            writer.writeNext(new String[]{libID, bookID, checkoutTimestamp,"",lengthDays,getReturnDate(checkoutTimestamp,lengthDays),"0"});
             System.out.println("You have successfully checked out: " + bookID);
             return true;
         } catch (Exception e) {
