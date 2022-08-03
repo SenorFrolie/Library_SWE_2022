@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+import javax.lang.model.util.ElementScanner14;
+
 import com.opencsv.*;
 import com.opencsv.exceptions.CsvException;
 
@@ -35,7 +37,7 @@ public class Ledger {
     }
 
     public boolean returnItem(String libID, String itemID) throws IOException, CsvException {
-        int row = getItemCheckoutRow(libID, itemID);
+        int row = getItemCheckoutRow(libID, itemID, false);
         CSVReader reader = new CSVReader(new FileReader("Ledger.csv"));
         List<String[]> csvBody = reader.readAll();        
         
@@ -64,8 +66,9 @@ public class Ledger {
         return true;
     }
 
-    private static int getItemCheckoutRow(String libID, String itemID) throws IOException, CsvException {
+    private static int getItemCheckoutRow(String libID, String itemID, Boolean entries) throws IOException, CsvException {
         int row = 1;
+        int entriesFound = 0;
         FileReader file = new FileReader("Ledger.csv");
         BufferedReader reader = new BufferedReader(file);
         try {
@@ -78,11 +81,16 @@ public class Ledger {
                 String fileItemID = data[1];  
 
                 if (fileLibID.equals(libID) && fileItemID.equals(itemID)) {
-                    return row;
+                    if (entries) {
+                        entriesFound++;
+                    } else {
+                        return row;
+                    }
                 } else {
                     row++;
                 }
             }
+            return entriesFound;
         } catch (Exception e) {
             System.out.println("FILE ERROR: "+e);
         } finally {
@@ -102,7 +110,7 @@ public class Ledger {
 
     private String getReturnDate(String date, String lengthDays) {
         if (date.equals("")) {
-            return "";
+            return "0";
         }
         Calendar calendar = Calendar.getInstance();
         long dateCheckedSeconds = Long.parseLong(date.trim());
@@ -140,7 +148,7 @@ public class Ledger {
                     bookCheckoutInfo.add(tsToDate(dueDate));
                     bookCheckoutInfo.add(fine);
                     //check for currently checked out items
-                    if (dateReturned.equals("")) {
+                    if (dateReturned.equals("0")) {
                         currentCheckedItems.add(bookCheckoutInfo);
                     }
                     checkedItems.add(bookCheckoutInfo);
@@ -153,7 +161,7 @@ public class Ledger {
         }
     }
 
-    public Boolean setLedger(String libID, String bookID) throws IOException{
+    public Boolean setLedger(String libID, String itemID) throws IOException{
         if (getCurrentCheckedItems().size() >= 5) {
             System.out.println("You have reached the limit. Please return a book/visual to checkout another item.\n");
             return false;
@@ -163,12 +171,17 @@ public class Ledger {
         try {
             String checkoutTimestamp = ""+System.currentTimeMillis();
             BookShelf shelf = new BookShelf();
-            String lengthDays = shelf.isBestSeller(bookID) ? "14" : "21";
-            writer.writeNext(new String[]{libID, bookID, checkoutTimestamp,"",lengthDays,getReturnDate(checkoutTimestamp,lengthDays),"0"});
-            System.out.println("You have successfully checked out: " + bookID);
-            return true;
+            String lengthDays = shelf.isBestSeller(itemID) ? "14" : "21";
+            if (getItemCheckoutRow(libID, itemID, true) < 2) {
+                writer.writeNext(new String[]{libID, itemID, checkoutTimestamp,"0",lengthDays,getReturnDate(checkoutTimestamp,lengthDays),"0"});
+                System.out.println("You have successfully checked out: " + itemID);
+                return true;
+            } else {
+                System.out.println("You have checked out this item twice. You must return it.");
+                return false;
+            }
         } catch (Exception e) {
-            System.out.println("Failed to checkout books: "+bookID);
+            System.out.println("Failed to checkout books: "+itemID);
         } finally {
             writer.close();
         }
