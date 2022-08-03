@@ -101,9 +101,9 @@ public static void itemReturn(String ID, int type) throws IOException, CsvExcept
         
     TheSystem.logOut();
         
-    }
+}
 
-    public static void renewItem(String ID, int type) throws IOException, CsvException{
+public static void renewItem(String ID, int type) throws IOException, CsvException{
 
         Ledger ledger = new Ledger(TheSystem.ID);
         ledger.getLedger();

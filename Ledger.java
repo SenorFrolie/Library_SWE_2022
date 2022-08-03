@@ -111,7 +111,7 @@ public class Ledger {
         }
         DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
         long milliSeconds = Long.parseLong(ts.trim());
-        Date date = new Date(milliSeconds*1000);
+        Date date = new Date(milliSeconds);
         return formatter.format(date);
     }
 
@@ -185,7 +185,8 @@ public class Ledger {
                 System.out.println("This item is due by " + tsToDate(getReturnDate(checkoutTimestamp,lengthDays)));
                 return true;
             } else {
-                System.out.println("You have checked out this item twice. You must return it by:\n" + tsToDate(getReturnDate(checkoutTimestamp,lengthDays)));
+                System.out.println("You have checked out this item twice. You must return it by:\n" 
+                                    + tsToDate(getReturnDate(checkoutTimestamp,lengthDays)));
                 return false;
             }
         } catch (Exception e) {
