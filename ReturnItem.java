@@ -91,6 +91,8 @@ public static void itemReturn(String ID, int type) throws IOException, CsvExcept
         System.out.println("Please enter item ID");
         user_input = sc.nextLine();
         String nameOfItem = BookShelf.findBookByID(user_input);
+
+        ledger.returnItem(ID, user_input);
     
         System.out.println("The item: " + nameOfItem);
         System.out.println("Has been returned. Fees: " + ledger.getCurrentFinesForUser(TheSystem.ID));
@@ -101,6 +103,8 @@ public static void itemReturn(String ID, int type) throws IOException, CsvExcept
         System.out.println("Please enter item ID");
         user_input = sc.nextLine();
         String nameOfItem = BookShelf.findVMByID(user_input);
+
+        ledger.returnItem(ID, user_input);
 
         System.out.println("The item: " + nameOfItem);
         System.out.println("Has been returned. Fees: " + ledger.getCurrentFinesForUser(TheSystem.ID));
