@@ -46,11 +46,17 @@ public class Ledger {
     public boolean returnItem(String libID, String itemID) throws IOException, CsvException {
         int row = getItemCheckoutRow(libID, itemID, false);
         CSVReader reader = new CSVReader(new FileReader("Ledger.csv"));
-        List<String[]> csvBody = reader.readAll();        
+        List<String[]> csvBody = reader.readAll();       
+        
+        Scanner sc = new Scanner(System.in);
+        String user_input;
+        System.out.println("Enter date in epoch");
+        user_input = sc.next();
+        //sc.close();
         
         int dateReturnedTimeStamp = Integer.parseInt(csvBody.get(row)[DATE_RETURNED_COLUMN]);
         int dateCheckoutTimeStamp = Integer.parseInt(csvBody.get(row)[DATE_CHECKOUT_COLUMN]);
-        csvBody.get(row)[DATE_RETURNED_COLUMN] = ""+System.currentTimeMillis()/1000;
+        csvBody.get(row)[DATE_RETURNED_COLUMN] = user_input;
 
         int diffDays = (dateReturnedTimeStamp - dateCheckoutTimeStamp) / 86400;
 
@@ -64,6 +70,7 @@ public class Ledger {
             if (fee > bookValue) {
                 fee = bookValue;
             }
+            System.out.print(fee);
             csvBody.get(row)[FINES_COLUMN] = String.format("%.2f",fee);
         }
 
@@ -176,6 +183,10 @@ public class Ledger {
     public Boolean setLedger(String libID, String itemID, int itemType) throws IOException{
         if (getCurrentCheckedItems().size() >= 5 && MemberPages.isChild(libID) == true) {
             System.out.println("You have reached the limit. Please return a book/visual to checkout another item.\n");
+            return false;
+        }
+        if (!getCurrentFinesForUser(libID).equals("0")) {
+            System.out.println("You currently have a fine. You cannot check out until you pay.\n");
             return false;
         }
         String csv = "Ledger.csv";
