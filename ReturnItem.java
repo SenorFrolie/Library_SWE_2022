@@ -11,7 +11,10 @@ import com.opencsv.exceptions.CsvException;
 
 
 public class ReturnItem{
-    public static void returnProcess(String ID){
+
+
+
+    public static void returnProcess(String ID) throws IOException, CsvException{
         //Display user items/ due dates/ fees etc (from ledger)
         int user_input;
         int itemReturning;
@@ -67,7 +70,7 @@ public class ReturnItem{
             }
         
         } while (user_input != 3);
-        
+        TheSystem.logOut();
 
     }
 
@@ -79,8 +82,20 @@ public class ReturnItem{
 //calculate fees (ledger)
 //shows reciept to user to show its been returned and fees if applicable (ledger)
 
-public static void itemReturn(String ID, int type) throws IOException{
+public static void itemReturn(String ID, int type) throws IOException, CsvException{
 
+    Ledger ledger = new Ledger(TheSystem.ID);
+    ledger.getLedger();
+
+    Scanner sc = new Scanner(System.in);
+    String user_input;
+    
+    System.out.println("Please enter item ID");
+    user_input = sc.nextLine();
+    
+    
+    System.out.println(ledger.returnItem(ID, user_input));
+    /* 
     Scanner sc = new Scanner(System.in);
 
     String userID = ID;
@@ -90,7 +105,7 @@ public static void itemReturn(String ID, int type) throws IOException{
         String idOfBook = availabality();
 
         String nameOfBook = BookShelf.findBookByID(idOfBook);
-        int bookfees;
+        //int bookfees;
         //return book to list
         //Write back to book list function
         String bookSrc = "returnedMaterial.csv";
@@ -109,7 +124,7 @@ public static void itemReturn(String ID, int type) throws IOException{
 
         //Reciept for user to see
         System.out.println("The book: " + nameOfBook);
-        System.out.println("Has been returned. Fees: " + bookfees);
+        System.out.println("Has been returned. Fees: ");
         
         TheSystem.logOut();
         
@@ -118,7 +133,7 @@ public static void itemReturn(String ID, int type) throws IOException{
         String idOfVisual = availabality();
 
         String nameOfVisual = BookShelf.findVMByID(idOfVisual);
-        int visualFees;
+        //int visualFees;
         //return book to list
         //Write back to book list function
         String visualSrc = "returnedMaterial.csv";
@@ -136,19 +151,22 @@ public static void itemReturn(String ID, int type) throws IOException{
         //sc.close();
 
 
-
-        System.out.println("The item: " + nameOfVisual);
-        System.out.println("Has been returned. Fees: " + visualFees);
+*/
+        System.out.println("The item: ");
+        System.out.println("Has been returned. Fees: ");
         
         TheSystem.logOut();
         
     }
 
-}
 
-public static String availabality() throws IOException{
+
+public static String availabality() throws IOException, CsvException{
 
     Scanner sc = new Scanner(System.in);
+    
+    Ledger ledger = new Ledger(TheSystem.ID);
+    ledger.getLedger();
     
     //Check if available
     String user_input;
@@ -159,12 +177,19 @@ public static String availabality() throws IOException{
         
         user_input = sc.nextLine();
 
+        System.out.println(user_input);
+        
+        System.out.println(ledger.getCurrentCheckedItems());
 
+        //System.out.println(Ledger.getCurrentCheckedItemByID(user_input));
+
+        
+        
         Boolean availabality = Ledger.getCurrentCheckedItemByID(user_input);
         if(availabality == true){
             return user_input;
         }
-        else if(availabality == false){
+        else if(availabality.equals(false)){
             do{
                 System.out.println("Item not found");
                 System.out.println("1. Search for another item");
@@ -188,7 +213,6 @@ public static String availabality() throws IOException{
     }while(user_input != null);
     return null;
 }
-
 
 
 }

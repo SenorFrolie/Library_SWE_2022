@@ -30,7 +30,7 @@ public static boolean checkforFees(String ID){
 
 
     // would you like to checkout book or visual material?
-public static void startCheckOut() throws IOException{
+public static void startCheckOut() throws IOException, CsvException{
         
         //check if user has fees 
         //then while(fees == 0) continue checkout
@@ -113,23 +113,9 @@ public static void startCheckOut() throws IOException{
 
     }
 
-//book checkout process function
-//which will check book availability and if not available request item
-//if available get due date for book with book id from ledger
-//assign book to user with ledger
-//print reciept to user to show due date of book
 
 
-
-//visual material checkout process function
-//which will check availability and if not available request item
-//if available get due date for visual mat with visual mat id from ledger
-//assign visual mat to user with ledger
-//print reciept to user to show due date of visual mat
-
-
-
-public static void bookCheckOut(String bookId) throws IOException{
+public static void bookCheckOut(String bookId) throws IOException, CsvException{
 
     Scanner sc = new Scanner(System.in);
     
@@ -174,7 +160,7 @@ public static void bookCheckOut(String bookId) throws IOException{
     TheSystem.logOut();
 }
 
-public static void visualCheckOut(String visualID) throws IOException{
+public static void visualCheckOut(String visualID) throws IOException, CsvException{
 
     Scanner sc = new Scanner(System.in);
     
@@ -217,4 +203,8 @@ public static void visualCheckOut(String visualID) throws IOException{
     } while(user_input != 3);
     TheSystem.logOut();
     }
+
+
+
+
 }

@@ -1,4 +1,7 @@
 import java.util.Scanner;
+
+import com.opencsv.exceptions.CsvException;
+
 import java.util.*;
 import java.io.*;
 
@@ -58,7 +61,7 @@ public class TheSystem {
     }
 
     // log out
-    public static void logOut() throws IOException{
+    public static void logOut() throws IOException, CsvException{
         ID = null;
         System.out.print("You have successfully logged out... \nReturning to main menu.");
         mainMenu();
@@ -86,7 +89,7 @@ public class TheSystem {
         }
     }
 
-    public static void mainMenu() throws IOException{
+    public static void mainMenu() throws IOException, CsvException{
         Scanner sc = new Scanner(System.in);
         BookShelf list = new BookShelf();
         //BookShelf listV = new BookShelf();
@@ -167,7 +170,7 @@ public class TheSystem {
 
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, CsvException {
 
         mainMenu();
     }

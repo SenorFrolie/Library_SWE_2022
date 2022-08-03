@@ -80,7 +80,7 @@ public class BookShelf {
 
 
     // Print the Menu 
-    public static void ShelfMainMenu() throws IOException{
+    public static void ShelfMainMenu() throws IOException, CsvException{
         Scanner sc = new Scanner(System.in);
        // BookShelf books = new BookShelf();
         System.out.println("--------------------------------------");
